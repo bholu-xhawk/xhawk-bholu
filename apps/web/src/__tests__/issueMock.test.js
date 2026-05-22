@@ -66,4 +66,24 @@ describe('Issue mock utilities', () => {
     const list = makeIssueList(4, (idx) => ({ state: idx % 2 === 0 ? 'open' : 'closed' }));
     expect(list.map((i) => i.state)).toEqual(['open', 'closed', 'open', 'closed']);
   });
+
+  it('resets mock state on restart (module reload)', () => {
+    // First load and monkey-patch the module's export to simulate stateful change
+    jest.isolateModules(() => {
+      const mod1 = require('../mocks/issue.js');
+      const originalMakeIssue = mod1.makeIssue;
+      // Patch makeIssue to change the default title
+      mod1.makeIssue = (overrides = {}) => originalMakeIssue({ ...overrides, title: 'Patched Title' });
+      expect(mod1.makeIssue().title).toBe('Patched Title');
+    });
+
+    // Simulate process restart by clearing Jest's module registry
+    jest.resetModules();
+
+    // Re-require should restore the original defaults
+    jest.isolateModules(() => {
+      const mod2 = require('../mocks/issue.js');
+      expect(mod2.makeIssue().title).toBe('Sample issue title');
+    });
+  });
 });
