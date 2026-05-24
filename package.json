@@ -8,5 +8,9 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "node -e \"console.log('No tests specified')\""
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "uuid": "^9.0.1"
   }
 }
