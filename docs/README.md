@@ -31,12 +31,12 @@ flowchart LR
 
 ## Flow Index
 
-- Planning State Machine: flows/planning_state_machine.md
-- Implement Flow: flows/implement_flow.md
-- Review and Test Flow: flows/review_and_test_flow.md
-- Task Subagent Flow: flows/task_subagent_flow.md
-- Tool Call Lifecycle & Guardrails: flows/tool_call_lifecycle.md
-- Error and Retry Flow: flows/error_and_retry_flow.md
+- Planning State Machine: flows/planning_state_machine.md — Defines states, timeouts, and transitions for turning goals into plans and driving execution.
+- Implement Flow: flows/implement_flow.md — Applies minimal changes safely with verification, artifacts, and bounded retries.
+- Review and Test Flow: flows/review_and_test_flow.md — Provides checklists and testing strategy (unit/integration) to ensure quality and determinism.
+- Task Subagent Flow: flows/task_subagent_flow.md — When and how to spawn subagents, with prompt templates and output schema.
+- Tool Call Lifecycle & Guardrails: flows/tool_call_lifecycle.md — Safe, paginated usage of repo tools with do/don't and execution patterns.
+- Error and Retry Flow: flows/error_and_retry_flow.md — Error taxonomy, retry/backoff policy, and escalation/observability guidelines.
 
 ## Related / Legacy
 

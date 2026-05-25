@@ -80,3 +80,35 @@ Edge cases
 Observability
 - Emit structured logs/metrics on every transition: state_from, state_to, event_type, correlation_id, attempt, timestamps.
 - Trace tool calls and timers with causal links to state transitions.
+
+## States
+- Idle, Analyzing, Planning, Executing, Waiting, Blocked, Failed, Completed, Cancelled.
+- Each state defines entry actions, timers, and allowed events.
+
+## Transitions
+- Explicit guards for each transition; reject illegal transitions with logs.
+- Idempotent handling of duplicate events via event_id deduplication.
+
+## Timeouts & budgets
+- Planning timeout (e.g., 60s) and execution timeout per step (configurable).
+- Global budget per goal; on exceed, escalate with partial progress.
+- Backoff timers scheduled in Waiting; cancel on exit.
+
+## Must-ask rule
+- If any input, constraint, or acceptance criterion is ambiguous, ask before acting.
+- Examples:
+  - Conflicting requirements (e.g., "add flag" vs "no CLI changes").
+  - Missing environment details needed to run tests or builds.
+  - Unclear priority when scope is too large for the budget.
+- Batch questions to minimize round trips; propose defaults to accelerate.
+
+## Batching questions
+- Group related clarifications; order by impact on downstream work.
+- Provide proposed assumptions and request confirmation.
+- Include how answers will change the plan to show value.
+
+## Related flows
+- Implement Flow: ../flows/implement_flow.md
+- Review & Test Flow: ../flows/review_and_test_flow.md
+- Error & Retry Flow: ../flows/error_and_retry_flow.md
+- Tool Call Lifecycle & Guardrails: ../flows/tool_call_lifecycle.md
