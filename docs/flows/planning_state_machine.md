@@ -80,3 +80,9 @@ Edge cases
 Observability
 - Emit structured logs/metrics on every transition: state_from, state_to, event_type, correlation_id, attempt, timestamps.
 - Trace tool calls and timers with causal links to state transitions.
+
+Archival policy
+- archive is allowed only from terminal states: Completed, Failed, or Cancelled.
+- Archive requests received while in Planning, Executing (Working), or Waiting MUST be rejected (e.g., 409/conflict) with a clear error and no state change.
+- Operators should cancel then archive when archival is desired during a non-terminal state. This ensures execution is stopped deterministically before archival.
+- Archival is a terminal-only administrative action and does not change the underlying terminal state; it marks the run/issue as archived for retention/visibility.

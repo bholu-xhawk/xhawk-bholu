@@ -291,6 +291,27 @@ Map requirement IDs to test scenarios/cases.
 - Metrics/logs/traces are emitted per transition as specified and include required context fields.
 - Coverage goals in Section 12 met; CI passes reliably and deterministically.
 
+## Archival Scenarios
+
+Archive while Executing (Working)
+- Given: PSM state = Executing
+- When: archive is requested
+- Then: request is rejected with conflict (e.g., 409), no state change, and guidance to cancel then archive
+- And: metrics/logs capture the illegal transition attempt
+
+Cancel then Archive
+- Given: PSM state = Executing
+- When: cancel is requested and transition completes to Cancelled
+- And: archive is requested
+- Then: archive succeeds, marking the run/issue as archived, with no further state transition (remains Cancelled)
+- And: observability shows archive action recorded
+
+Archive after Completed
+- Given: PSM state = Completed
+- When: archive is requested
+- Then: archive succeeds, marking the run/issue as archived, with no further state transition (remains Completed)
+- And: observability shows archive action recorded
+
 ## 15. Open Items & Placeholders
 - Replace placeholder state and event names with final enums/constants once available.
 - Confirm exact retry/backoff policy and timer semantics (per-step vs global) and update tests accordingly.
