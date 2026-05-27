@@ -1,0 +1,5 @@
+- Added comprehensive docs/setup/postgres-react-native-setup.md covering Dockerized PostgreSQL and Expo-managed React Native
+- Included prerequisites, Docker Compose snippet, env vars, psql access, security, migrations guidance, Expo setup, env config, networking notes, CI/CD pointers, and troubleshooting
+- Linked the new guide from root README.md under a new Setup Guides section
+- Updated docs/README.md to include a Setup Guides section pointing to the new guide
+- Kept changes documentation-only; no runtime code or infra committed

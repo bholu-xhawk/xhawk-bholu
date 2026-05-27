@@ -38,6 +38,10 @@ flowchart LR
 - Tool Call Lifecycle & Guardrails: flows/tool_call_lifecycle.md
 - Error and Retry Flow: flows/error_and_retry_flow.md
 
+## Setup Guides
+
+- PostgreSQL and React Native Setup Plan: setup/postgres-react-native-setup.md
+
 ## Related / Legacy
 
 - Test Plan for the New Planning State Machine: test_plan_planning_state_machine.md
