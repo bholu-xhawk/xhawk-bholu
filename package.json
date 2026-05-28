@@ -8,5 +8,11 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "node -e \"console.log('No tests specified')\""
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.6.0",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
   }
 }
