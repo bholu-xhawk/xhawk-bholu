@@ -1,4 +1,13 @@
-# Internal Agent/System Flows
+# Project Documentation
+
+This folder contains setup guides and internal engineering docs for this repository.
+
+## Getting Started
+
+- [PostgreSQL Setup](./postgres-setup.md)
+- [React Native Setup](./react-native-setup.md)
+
+## Internal Agent/System Flows
 
 This folder documents the internal engineering flows that power the repository. The focus is on how the agent plans, implements changes, reviews/tests them, interacts with tools, spawns subagents, and handles errors/retries.
 
