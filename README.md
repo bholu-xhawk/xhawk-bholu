@@ -7,3 +7,4 @@
 ## Documentation
 
 - Internal Agent/System Flows index: [docs/README.md](docs/README.md)
+- Setup PostgreSQL and React Native: [docs/guides/setup_postgres_and_react_native.md](docs/guides/setup_postgres_and_react_native.md)
