@@ -1,0 +1,5 @@
+- Add new test file apps/web/src/__tests__/issueArchive.test.tsx
+- Verify Archive control is disabled for agent statuses working and in_progress
+- Assert tooltip/explanatory text is present when disabled
+- Verify Archive control is enabled with no tooltip when agent is idle
+- Follow existing testing setup with @testing-library/react and jest-dom
