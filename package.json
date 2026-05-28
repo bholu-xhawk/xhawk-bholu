@@ -6,7 +6,10 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node src/server.js",
     "test": "node -e \"console.log('No tests specified')\""
+  },
+  "dependencies": {
+    "express": "^4.19.2"
   }
 }
