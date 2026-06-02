@@ -1,3 +1,4 @@
+// Users CRUD routes protected by auth
 const express = require('express');
 const { z } = require('zod');
 const prisma = require('../prisma');
@@ -97,4 +98,4 @@ router.delete('/users/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router; // export users router
