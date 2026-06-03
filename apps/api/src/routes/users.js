@@ -57,6 +57,16 @@ router.post('/users', async (req, res) => {
   }
 });
 
+// Mock endpoint: validates input but returns a deterministic mock user without DB writes
+router.post('/users/mock', async (req, res) => {
+  const parse = createUserSchema.safeParse(req.body);
+  if (!parse.success) return res.status(422).json({ error: 'Invalid input', details: parse.error.flatten() });
+  const { email, name } = parse.data;
+  const now = new Date();
+  const mock = { id: 0, email, name: name ?? null, createdAt: now, updatedAt: now };
+  return res.status(200).json(mock);
+});
+
 router.put('/users/:id', async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: 'Invalid id' });
