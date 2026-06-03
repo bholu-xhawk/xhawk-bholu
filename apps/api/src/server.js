@@ -11,6 +11,18 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Public mock user endpoint (no auth)
+app.get('/api/user', (req, res) => {
+  const now = new Date('2020-01-01T00:00:00.000Z');
+  res.json({
+    id: 1,
+    email: 'mock.user@example.com',
+    name: 'Mock User',
+    createdAt: now,
+    updatedAt: now,
+  });
+});
+
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 
