@@ -12,7 +12,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api', authRoutes);
-app.use('/api', userRoutes);
+app.use('/api/users', userRoutes);
 
 // 404 handler for /api
 app.use('/api', (req, res) => {

@@ -19,7 +19,7 @@ const updateUserSchema = z.object({
 
 router.use(auth);
 
-router.get('/users', async (req, res) => {
+router.get('/', async (req, res) => {
   const users = await prisma.user.findMany({
     select: { id: true, email: true, name: true, createdAt: true, updatedAt: true },
     orderBy: { id: 'asc' },
@@ -27,7 +27,7 @@ router.get('/users', async (req, res) => {
   res.json(users);
 });
 
-router.get('/users/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: 'Invalid id' });
   const user = await prisma.user.findUnique({
@@ -38,7 +38,7 @@ router.get('/users/:id', async (req, res) => {
   res.json(user);
 });
 
-router.post('/users', async (req, res) => {
+router.post('/', async (req, res) => {
   const parse = createUserSchema.safeParse(req.body);
   if (!parse.success) return res.status(422).json({ error: 'Invalid input', details: parse.error.flatten() });
   const { email, name, password } = parse.data;
@@ -53,11 +53,14 @@ router.post('/users', async (req, res) => {
     });
     res.status(201).json(user);
   } catch (err) {
+    if (err && err.code === 'P2002') {
+      return res.status(422).json({ error: 'Email already in use' });
+    }
     res.status(500).json({ error: 'Failed to create user' });
   }
 });
 
-router.put('/users/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: 'Invalid id' });
   const parse = updateUserSchema.safeParse(req.body);
@@ -85,7 +88,7 @@ router.put('/users/:id', async (req, res) => {
   }
 });
 
-router.delete('/users/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: 'Invalid id' });
   try {
