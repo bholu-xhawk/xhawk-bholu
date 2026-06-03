@@ -57,7 +57,11 @@ router.post('/auth/login', async (req, res) => {
     return res.status(400).json({ error: 'Invalid email or password' });
   }
 
-  const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '7d' });
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    return res.status(500).json({ error: 'JWT_SECRET is not configured' });
+  }
+  const token = jwt.sign({ id: user.id, email: user.email }, secret, { expiresIn: '7d' });
   return res.json({ token });
 });
 

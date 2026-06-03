@@ -1,4 +1,5 @@
 import request from 'supertest';
+import express from 'express';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
 
@@ -59,5 +60,29 @@ describe('Auth API', () => {
       .send({ email: 'c@example.com', password: 'password123' })
       .expect(200);
     expect(res.body).toHaveProperty('token');
+  });
+
+  it('login fails with 500 when JWT_SECRET is missing', async () => {
+    const local = express();
+    local.use(express.json());
+    const mod = await import('../src/routes/auth.js');
+    const authRouter = mod.default || mod;
+    local.use('/api', authRouter);
+
+    await request(local)
+      .post('/api/auth/signup')
+      .send({ email: 'no-secret@example.com', password: 'password123' })
+      .expect(201);
+
+    const prev = process.env.JWT_SECRET;
+    delete process.env.JWT_SECRET;
+
+    const res = await request(local)
+      .post('/api/auth/login')
+      .send({ email: 'no-secret@example.com', password: 'password123' })
+      .expect(500);
+    expect(res.body).toHaveProperty('error', 'JWT_SECRET is not configured');
+
+    process.env.JWT_SECRET = prev;
   });
 });
