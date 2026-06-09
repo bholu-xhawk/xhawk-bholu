@@ -60,7 +60,7 @@ router.post('/auth/login', async (req, res) => {
   const secret = process.env.JWT_SECRET;
   if (!secret) {
     console.error('JWT_SECRET is not configured');
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'JWT_SECRET is not configured' });
   }
   const token = jwt.sign({ id: user.id, email: user.email }, secret, { expiresIn: '7d' });
   return res.json({ token });
