@@ -3,12 +3,6 @@ const express = require('express');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 
-// Validate critical configuration at startup
-if (!process.env.JWT_SECRET) {
-  console.error('JWT_SECRET is not configured');
-  throw new Error('JWT_SECRET is not configured');
-}
-
 const app = express();
 
 app.use(express.json());
@@ -33,6 +27,10 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 3001;
 if (require.main === module) {
+  if (!process.env.JWT_SECRET) {
+    console.error('JWT_SECRET is not configured');
+    process.exit(1);
+  }
   app.listen(port, () => {
     console.log(`API listening on http://localhost:${port}`);
   });
