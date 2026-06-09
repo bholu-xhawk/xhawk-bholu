@@ -3,6 +3,12 @@ const express = require('express');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 
+// Validate critical configuration at startup
+if (!process.env.JWT_SECRET) {
+  console.error('JWT_SECRET is not configured');
+  throw new Error('JWT_SECRET is not configured');
+}
+
 const app = express();
 
 app.use(express.json());

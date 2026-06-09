@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express from 'express';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { execSync } from 'node:child_process';
 
 process.env.DATABASE_URL = 'file:./test.db';
@@ -74,9 +74,8 @@ describe('Auth API', () => {
       .send({ email: 'no-secret@example.com', password: 'password123' })
       .expect(201);
 
-    const prev = process.env.JWT_SECRET;
     try {
-      delete process.env.JWT_SECRET;
+      vi.stubEnv('JWT_SECRET', '');
 
       const res = await request(local)
         .post('/api/auth/login')
@@ -84,7 +83,7 @@ describe('Auth API', () => {
         .expect(500);
       expect(res.body).toHaveProperty('error', 'JWT_SECRET is not configured');
     } finally {
-      process.env.JWT_SECRET = prev;
+      vi.unstubAllEnvs();
     }
   });
 });
