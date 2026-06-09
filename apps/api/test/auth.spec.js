@@ -75,14 +75,16 @@ describe('Auth API', () => {
       .expect(201);
 
     const prev = process.env.JWT_SECRET;
-    delete process.env.JWT_SECRET;
+    try {
+      delete process.env.JWT_SECRET;
 
-    const res = await request(local)
-      .post('/api/auth/login')
-      .send({ email: 'no-secret@example.com', password: 'password123' })
-      .expect(500);
-    expect(res.body).toHaveProperty('error', 'JWT_SECRET is not configured');
-
-    process.env.JWT_SECRET = prev;
+      const res = await request(local)
+        .post('/api/auth/login')
+        .send({ email: 'no-secret@example.com', password: 'password123' })
+        .expect(500);
+      expect(res.body).toHaveProperty('error', 'JWT_SECRET is not configured');
+    } finally {
+      process.env.JWT_SECRET = prev;
+    }
   });
 });
