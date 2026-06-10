@@ -49,11 +49,6 @@ router.post('/auth/login', async (req, res) => {
   const { email, password } = parse.data;
 
   const secret = process.env.JWT_SECRET;
-  if (!secret) {
-    console.error('JWT_SECRET is not configured');
-    return res.status(500).json({ error: 'JWT_SECRET is not configured' });
-  }
-
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) {
     return res.status(400).json({ error: 'Invalid email or password' });

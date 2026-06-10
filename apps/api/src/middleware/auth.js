@@ -10,7 +10,7 @@ function auth(req, res, next) {
   const secret = process.env.JWT_SECRET;
   if (!secret) {
     console.error('JWT_SECRET is not configured');
-    return res.status(500).json({ error: 'JWT_SECRET is not configured' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
   try {
     const payload = jwt.verify(token, secret);
