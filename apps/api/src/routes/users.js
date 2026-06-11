@@ -14,7 +14,7 @@ function sanitizeUser(user) {
 const updateSchema = z.object({
   name: z.string().optional(),
   password: z.string().min(8).optional()
-})
+}).refine((obj) => obj.name !== undefined || obj.password !== undefined, { message: 'At least one of name or password must be provided' })
 
 usersRouter.get('/me', requireAuth, async (req, res, next) => {
   try {

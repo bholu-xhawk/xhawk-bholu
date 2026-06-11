@@ -37,6 +37,9 @@ authRouter.post('/signup', async (req, res, next) => {
     if (err.name === 'ZodError') {
       return res.status(422).json({ success: false, error: { message: 'Validation failed', details: err.errors } })
     }
+    if (err && err.code === 'P2002') {
+      return res.status(422).json({ success: false, error: { message: 'Email already in use' } })
+    }
     next(err)
   }
 })

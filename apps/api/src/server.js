@@ -26,7 +26,11 @@ export function createApp() {
   app.use((err, _req, res, _next) => {
     // Basic error mapping
     const status = err.status || 500
-    const message = err.message || 'Internal Server Error'
+    const isServerError = status >= 500
+    if (isServerError) {
+      console.error(err)
+    }
+    const message = isServerError ? 'Internal Server Error' : (err.message || 'Bad Request')
     res.status(status).json({ success: false, error: { message } })
   })
 
