@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const authMockRoutes = require('./routes/authMock');
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api', authRoutes);
+app.use('/api', authMockRoutes);
 app.use('/api', userRoutes);
 
 // 404 handler for /api

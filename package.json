@@ -8,5 +8,14 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "node -e \"console.log('No tests specified')\""
+  },
+  "pnpm": {
+    "allow-scripts": {
+      "@prisma/client": true,
+      "@prisma/engines": true,
+      "bcrypt": true,
+      "esbuild": true,
+      "prisma": true
+    }
   }
 }
