@@ -1,20 +1,29 @@
 import request from 'supertest';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import express from 'express';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { execSync } from 'node:child_process';
 
 process.env.DATABASE_URL = 'file:./test.db';
-process.env.JWT_SECRET = 'test-secret';
+// JWT_SECRET is set and restored within beforeAll/afterAll to avoid global side effects
 
 let app;
+let previousJwtSecret;
 
 describe('Auth API', () => {
   beforeAll(async () => {
+    previousJwtSecret = process.env.JWT_SECRET;
+    process.env.JWT_SECRET = 'test-secret';
     execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
     const mod = await import('../src/server.js');
     app = mod.default || mod;
   }, 60000);
 
   afterAll(() => {
+    if (previousJwtSecret === undefined) {
+      delete process.env.JWT_SECRET;
+    } else {
+      process.env.JWT_SECRET = previousJwtSecret;
+    }
     try { execSync('rm -f ./test.db'); } catch {}
   });
 
@@ -60,4 +69,6 @@ describe('Auth API', () => {
       .expect(200);
     expect(res.body).toHaveProperty('token');
   });
+
+
 });

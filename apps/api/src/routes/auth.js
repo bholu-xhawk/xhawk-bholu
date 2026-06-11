@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { z } = require('zod');
 const prisma = require('../prisma');
+const { getJwtSecret } = require('../utils/jwt');
 
 const router = express.Router();
 
@@ -57,7 +58,14 @@ router.post('/auth/login', async (req, res) => {
     return res.status(400).json({ error: 'Invalid email or password' });
   }
 
-  const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '7d' });
+  let secret;
+  try {
+    secret = getJwtSecret();
+  } catch (e) {
+    console.error(e.message);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+  const token = jwt.sign({ id: user.id, email: user.email }, secret, { expiresIn: '7d' });
   return res.json({ token });
 });
 
