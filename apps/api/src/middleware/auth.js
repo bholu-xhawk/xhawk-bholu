@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { getJwtSecret } = require('../utils/jwt');
 
 function auth(req, res, next) {
   const header = req.headers['authorization'] || '';
@@ -7,9 +8,11 @@ function auth(req, res, next) {
     return res.status(401).json({ error: 'Missing or invalid Authorization header. Expected: Authorization: Bearer <token>' });
   }
   const token = header.slice(prefix.length);
-  const secret = process.env.JWT_SECRET;
-  if (!secret) {
-    console.error('JWT_SECRET is not configured');
+  let secret;
+  try {
+    secret = getJwtSecret();
+  } catch (e) {
+    console.error(e.message);
     return res.status(500).json({ error: 'Internal server error' });
   }
   try {
