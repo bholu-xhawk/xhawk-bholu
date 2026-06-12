@@ -13,7 +13,8 @@ export async function getAuthHeader(app, { email, password } = {}) {
 
   const res = await request(app)
     .post('/api/auth/login')
-    .send({ email: userEmail, password: userPassword });
+    .send({ email: userEmail, password: userPassword })
+    .expect(200);
 
   if (!res.body || !res.body.token) {
     throw new Error('Failed to obtain auth token in tests');

@@ -9,7 +9,7 @@ process.env.JWT_SECRET = 'test-secret';
 beforeAll(async () => {
   try {
     // Generate client and push schema. Using pnpm -C ensures workspace context
-    execSync('npx prisma generate && npx prisma db push --force-reset', {
+    execSync('npx prisma db push --force-reset', {
       stdio: 'inherit',
       env: process.env,
     });
