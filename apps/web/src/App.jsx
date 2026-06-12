@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
+import OnboardingGate from './components/OnboardingGate.jsx';
+import Welcome from './pages/Welcome.jsx';
 
 export default function App() {
   return (
@@ -17,11 +19,15 @@ export default function App() {
         </ul>
       </nav>
       <main className="p-6">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
+        <OnboardingGate>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/welcome" element={<Welcome />} />
+          </Routes>
+        </OnboardingGate>
       </main>
     </div>
   );
 }
+
