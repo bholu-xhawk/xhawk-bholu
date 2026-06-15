@@ -5,11 +5,11 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "vite",
-    "build": "echo \"skip vite build\"",
+    "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
     "format": "prettier --write \"**/*.{js,jsx,css,html,json,md}\"",
-    "test": "echo \"skip tests\""
+    "test": "jest"
   },
   "dependencies": {
     "react": "^18.2.0",
