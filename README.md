@@ -7,3 +7,7 @@
 ## Documentation
 
 - Internal Agent/System Flows index: [docs/README.md](docs/README.md)
+
+## Infrastructure
+
+- Infrastructure overview: [docs/infrastructure/README.md](docs/infrastructure/README.md)
