@@ -37,6 +37,7 @@ flowchart LR
 - Task Subagent Flow: flows/task_subagent_flow.md
 - Tool Call Lifecycle & Guardrails: flows/tool_call_lifecycle.md
 - Error and Retry Flow: flows/error_and_retry_flow.md
+- Infrastructure Overview: infrastructure/README.md
 
 ## Related / Legacy
 
