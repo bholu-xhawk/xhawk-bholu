@@ -1,11 +1,13 @@
 export const ONBOARDING_KEY = 'onboardingComplete';
 export const THEME_KEY = 'theme';
 
+let memoryOnboardingComplete = false;
+
 export function isOnboardingComplete() {
   try {
     return typeof window !== 'undefined' && window.localStorage.getItem(ONBOARDING_KEY) === 'true';
   } catch (e) {
-    return false;
+    return memoryOnboardingComplete;
   }
 }
 
@@ -14,8 +16,11 @@ export function setOnboardingComplete(value = true) {
     if (typeof window !== 'undefined') {
       window.localStorage.setItem(ONBOARDING_KEY, value ? 'true' : 'false');
     }
+    memoryOnboardingComplete = value;
+    return true;
   } catch (e) {
-    // no-op in environments without localStorage
+    memoryOnboardingComplete = value;
+    return false;
   }
 }
 
