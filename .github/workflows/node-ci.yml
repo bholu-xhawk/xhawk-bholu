@@ -16,11 +16,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Enable corepack (pnpm)
+        run: corepack enable
       - name: Install dependencies
-        run: if [ -f package-lock.json ]; then npm ci --no-fund --no-audit; else npm install --no-fund --no-audit; fi
+        run: pnpm install
       - name: Run start script
-        run: npm run start
+        run: pnpm run start
       - name: Run tests
-        run: npm test
+        run: pnpm test

@@ -46,8 +46,8 @@ Note: pnpm is the recommended workflow. If you prefer npm, use it per-package (d
 ### Database (Prisma)
 Generate the Prisma client and apply development migrations from the API package:
 ```sh
-pnpm --filter ./apps/api prisma generate
-pnpm --filter ./apps/api prisma migrate dev
+pnpm --filter ./apps/api run prisma:generate
+pnpm --filter ./apps/api run prisma:migrate
 ```
 This will create a local SQLite database at the path defined by `DATABASE_URL` in `apps/api/.env`.
 
