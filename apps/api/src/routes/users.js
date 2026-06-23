@@ -45,14 +45,15 @@ router.post('/users', async (req, res) => {
   try {
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) return res.status(422).json({ error: 'Email already in use' });
-    const bcrypt = require('bcrypt');
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordUtil = require('../utils/password');
+    const passwordHash = await passwordUtil.hash(password, 10);
     const user = await prisma.user.create({
       data: { email, name, passwordHash },
       select: { id: true, email: true, name: true, createdAt: true, updatedAt: true },
     });
     res.status(201).json(user);
   } catch (err) {
+    console.error('Create user failed:', err);
     res.status(500).json({ error: 'Failed to create user' });
   }
 });
@@ -68,8 +69,8 @@ router.put('/users/:id', async (req, res) => {
   if (email !== undefined) data.email = email;
   if (name !== undefined) data.name = name;
   if (password !== undefined) {
-    const bcrypt = require('bcrypt');
-    data.passwordHash = await bcrypt.hash(password, 10);
+    const passwordUtil = require('../utils/password');
+    data.passwordHash = await passwordUtil.hash(password, 10);
   }
   try {
     const updated = await prisma.user.update({

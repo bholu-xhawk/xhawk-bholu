@@ -10,7 +10,7 @@ let token;
 
 describe('Users API', () => {
   beforeAll(async () => {
-    execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
+    execSync('node_modules/.bin/prisma generate && node_modules/.bin/prisma db push', { stdio: 'inherit', env: process.env });
     const mod = await import('../src/server.js');
     app = mod.default || mod;
 

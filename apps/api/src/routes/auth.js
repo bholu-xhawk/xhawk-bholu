@@ -1,5 +1,5 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
+const passwordUtil = require('../utils/password');
 const jwt = require('jsonwebtoken');
 const { z } = require('zod');
 const prisma = require('../prisma');
@@ -9,7 +9,7 @@ const router = express.Router();
 const signupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
-  name: z.string().optional(),
+  name: z.string().nullable().optional(),
 });
 
 const loginSchema = z.object({
@@ -30,7 +30,7 @@ router.post('/auth/signup', async (req, res) => {
   }
 
   try {
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await passwordUtil.hash(password, 10);
     const user = await prisma.user.create({
       data: { email, passwordHash, name },
       select: { id: true, email: true, name: true, createdAt: true, updatedAt: true },
@@ -52,7 +52,7 @@ router.post('/auth/login', async (req, res) => {
   if (!user) {
     return res.status(400).json({ error: 'Invalid email or password' });
   }
-  const ok = await bcrypt.compare(password, user.passwordHash);
+  const ok = await passwordUtil.compare(password, user.passwordHash);
   if (!ok) {
     return res.status(400).json({ error: 'Invalid email or password' });
   }
