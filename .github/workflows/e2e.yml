@@ -1,0 +1,33 @@
+name: E2E Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm -w install
+
+      - name: Install Playwright browsers
+        run: pnpm -w run e2e:install
+
+      - name: Run Playwright tests
+        run: pnpm -w run e2e:test
