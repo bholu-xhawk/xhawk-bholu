@@ -10,8 +10,8 @@ describe('App', () => {
         <App />
       </BrowserRouter>
     );
-
-    expect(screen.getByText(/Home/)).toBeInTheDocument();
+    
+    expect(screen.getByRole('link', { name: /Home/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument();
   });
 });
