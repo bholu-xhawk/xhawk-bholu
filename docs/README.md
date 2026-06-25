@@ -42,6 +42,10 @@ flowchart LR
 
 - Test Plan for the New Planning State Machine: test_plan_planning_state_machine.md
 
+## Briefs
+
+- Dashboard State Management Architecture: ./agent-brief.md
+
 ## Notes
 
 - Mermaid diagrams render on GitHub. Some third-party renderers may not display them.
