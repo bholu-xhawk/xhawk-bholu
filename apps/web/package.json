@@ -5,11 +5,11 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node ./scripts/run-vite-build.mjs",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
     "format": "prettier --write \"**/*.{js,jsx,css,html,json,md}\"",
-    "test": "jest"
+    "test": "node ./scripts/run-jest.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",

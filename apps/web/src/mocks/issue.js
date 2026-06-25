@@ -52,7 +52,7 @@ export function makeIssueWithAttachments(attachments, overrides = {}) {
     throw new Error('attachments must be an array');
   }
 
-  const validated = attachments.map((att) => {
+  const validated = attachments.map((att, idx) => {
     const { filename, contentType, size } = att || {};
     if (!contentType || typeof contentType !== 'string') {
       throw new Error('Unsupported attachment type');
@@ -61,7 +61,8 @@ export function makeIssueWithAttachments(attachments, overrides = {}) {
     if (!allowed) {
       throw new Error('Unsupported attachment type');
     }
-    const url = att.url || (filename ? `https://files.example/${filename}` : undefined);
+    const safeName = filename ? encodeURIComponent(filename) : `attachment-${idx + 1}`;
+    const url = att.url || `https://files.example/${safeName}`;
     return { filename, contentType, size, url };
   });
 
