@@ -4,6 +4,7 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
+  testPathIgnorePatterns: ['<rootDir>/tests-e2e/'],
   transform: {
     '^.+\\.[jt]sx?$': [
       'babel-jest',

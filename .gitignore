@@ -11,3 +11,8 @@ coverage/
 # Logs
 npm-debug.log*
 yarn-error.log*
+
+# Playwright artifacts
+playwright-report/
+test-results/
+blob-report/
