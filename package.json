@@ -7,6 +7,14 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "test": "node -e \"console.log('No tests specified')\"",
+    "e2e:install": "playwright install --with-deps",
+    "e2e:test": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "e2e:codegen": "playwright codegen http://localhost:5173"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.45.0"
   }
 }
+
