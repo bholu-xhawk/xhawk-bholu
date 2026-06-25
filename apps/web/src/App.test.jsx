@@ -11,7 +11,8 @@ describe('App', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Home/)).toBeInTheDocument();
+    // Check the nav link explicitly to avoid matching markup noise
+    expect(screen.getByRole('link', { name: /Home/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument();
   });
 });
