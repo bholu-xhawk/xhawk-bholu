@@ -10,6 +10,6 @@ if (!fs.existsSync(viteBin)) {
   process.exit(1);
 }
 
-const result = spawnSync(process.execPath, [viteBin, 'build'], { stdio: 'inherit' });
+const result = spawnSync(process.execPath, [viteBin, 'build', ...process.argv.slice(2)], { stdio: 'inherit' });
 process.exit(result.status ?? 1);
 
