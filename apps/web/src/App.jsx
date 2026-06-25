@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
+import Preview from './pages/Preview.jsx';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
 
@@ -14,12 +15,16 @@ export default function App() {
           <li>
             <Link className="text-blue-600 hover:underline" to="/about">About</Link>
           </li>
+          <li>
+            <Link className="text-blue-600 hover:underline" to="/preview">Preview</Link>
+          </li>
         </ul>
       </nav>
       <main className="p-6">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/preview" element={<Preview />} />
         </Routes>
       </main>
     </div>

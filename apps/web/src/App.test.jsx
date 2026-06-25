@@ -6,12 +6,12 @@ import App from './App.jsx';
 describe('App', () => {
   it('renders Home link in navigation and Home heading by default', () => {
     render(
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true }}>
         <App />
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Home/)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument();
-  });
+	    expect(screen.getByRole('link', { name: /Home/i })).toBeInTheDocument();
+	    expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument();
+	  });
 });
