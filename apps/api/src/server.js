@@ -11,6 +11,9 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// mount routes under /api
+const dummyUserRoutes = require('./routes/users_dummy');
+app.use('/api', dummyUserRoutes);
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 
