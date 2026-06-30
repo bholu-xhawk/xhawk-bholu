@@ -10,6 +10,7 @@ const signupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
   name: z.string().optional(),
+  role: z.string().optional(), // only honored for bootstrap (first user)
 });
 
 const loginSchema = z.object({
@@ -17,12 +18,19 @@ const loginSchema = z.object({
   password: z.string().min(1),
 });
 
+function normalizeRole(input) {
+  if (!input) return null;
+  const val = String(input).toUpperCase();
+  if (["ADMIN", "USER", "GUEST"].includes(val)) return val;
+  return null;
+}
+
 router.post('/auth/signup', async (req, res) => {
   const parse = signupSchema.safeParse(req.body);
   if (!parse.success) {
     return res.status(422).json({ error: 'Invalid input', details: parse.error.flatten() });
   }
-  const { email, password, name } = parse.data;
+  const { email, password, name, role: requestedRoleRaw } = parse.data;
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
@@ -31,9 +39,18 @@ router.post('/auth/signup', async (req, res) => {
 
   try {
     const passwordHash = await bcrypt.hash(password, 10);
+
+    // Determine role: allow setting role only if this is the first user (bootstrap)
+    let roleToSet = 'USER';
+    const totalUsers = await prisma.user.count();
+    if (totalUsers === 0) {
+      const normalized = normalizeRole(requestedRoleRaw);
+      if (normalized) roleToSet = normalized;
+    }
+
     const user = await prisma.user.create({
-      data: { email, passwordHash, name },
-      select: { id: true, email: true, name: true, createdAt: true, updatedAt: true },
+      data: { email, passwordHash, name, role: roleToSet },
+      select: { id: true, email: true, name: true, role: true, createdAt: true, updatedAt: true },
     });
     return res.status(201).json(user);
   } catch (err) {
@@ -57,8 +74,9 @@ router.post('/auth/login', async (req, res) => {
     return res.status(400).json({ error: 'Invalid email or password' });
   }
 
-  const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '7d' });
+  const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '7d' });
   return res.json({ token });
 });
 
 module.exports = router;
+
