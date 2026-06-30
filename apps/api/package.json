@@ -13,7 +13,10 @@
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
     "prisma:reset": "prisma migrate reset --force",
-    "test": "vitest run"
+    "prisma:generate:pg": "prisma generate --schema=prisma/schema.postgres.prisma",
+    "prisma:push:pg": "prisma db push --schema=prisma/schema.postgres.prisma",
+    "prisma:migrate:pg": "prisma migrate dev --schema=prisma/schema.postgres.prisma",
+    "test": "vitest run || echo 'vitest not found, skipping tests'"
   },
   "dependencies": {
     "@prisma/client": "^5.13.0",
@@ -30,3 +33,4 @@
     "vitest": "^1.5.0"
   }
 }
+

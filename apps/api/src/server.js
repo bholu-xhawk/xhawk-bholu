@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api', authRoutes);
+app.use('/api', adminRoutes);
 app.use('/api', userRoutes);
 
 // 404 handler for /api
@@ -33,3 +35,4 @@ if (require.main === module) {
 }
 
 module.exports = app; // export for testing
+
