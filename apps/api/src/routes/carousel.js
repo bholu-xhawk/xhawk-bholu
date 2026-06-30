@@ -36,11 +36,25 @@ router.post('/carousel-images', async (req, res) => {
   const { url, alt, title, caption, position, isActive } = parse.data;
 
   try {
-    let finalPosition = position;
-    if (finalPosition === undefined) {
-      const max = await prisma.carouselImage.aggregate({ _max: { position: true } });
-      const maxPos = max._max.position;
-      finalPosition = typeof maxPos === 'number' ? maxPos + 1 : 0;
+    if (position === undefined) {
+      const result = await prisma.$transaction(async (tx) => {
+        const created = await tx.carouselImage.create({
+          data: {
+            url,
+            alt: alt ?? undefined,
+            title: title ?? undefined,
+            caption: caption ?? undefined,
+            position: 0,
+            isActive: isActive ?? true,
+          },
+        });
+        const updated = await tx.carouselImage.update({
+          where: { id: created.id },
+          data: { position: created.id },
+        });
+        return updated;
+      });
+      return res.status(201).json(result);
     }
 
     const created = await prisma.carouselImage.create({
@@ -49,7 +63,7 @@ router.post('/carousel-images', async (req, res) => {
         alt: alt ?? undefined,
         title: title ?? undefined,
         caption: caption ?? undefined,
-        position: finalPosition,
+        position,
         isActive: isActive ?? true,
       },
     });
@@ -112,6 +126,10 @@ router.put('/carousel-images/reorder', async (req, res) => {
   const parse = reorderSchema.safeParse(req.body);
   if (!parse.success) return res.status(422).json({ error: 'Invalid input', details: parse.error.flatten() });
   const { items } = parse.data;
+  const positions = items.map(i => i.position);
+  if (new Set(positions).size !== positions.length || positions.some(p => p < 0)) {
+    return res.status(422).json({ error: 'Positions must be unique and non-negative' });
+  }
   try {
     await prisma.$transaction(
       items.map(({ id, position }) =>
