@@ -29,7 +29,7 @@ export async function apiFetch(path, options = {}) {
   // Attach Authorization if token exists and path is not under /auth/
   const token = getToken();
   const pathOnly = path.startsWith('/') ? path : `/${path}`;
-  if (token && !pathOnly.startsWith('/auth/')) {
+  if (token && !pathOnly.startsWith('/auth/') && !pathOnly.startsWith('/health')) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
