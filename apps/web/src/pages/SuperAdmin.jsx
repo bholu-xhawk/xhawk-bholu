@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import SettingsPanel from '../components/SuperAdmin/SettingsPanel.jsx';
 import PermissionsTable from '../components/SuperAdmin/PermissionsTable.jsx';
+import useLocalStorage from '../hooks/useLocalStorage.js';
 
 export default function SuperAdmin() {
-  const [maintenance, setMaintenance] = useState(false);
+  const [maintenance, setMaintenance] = useLocalStorage('settings:maintenance', false);
 
   return (
     <div className="space-y-8">

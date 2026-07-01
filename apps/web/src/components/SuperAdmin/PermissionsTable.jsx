@@ -27,7 +27,7 @@ export default function PermissionsTable() {
         const data = await res.json();
         const arr = Array.isArray(data) ? data : data.users || [];
         if (isMounted) {
-          const filled = arr && arr.length ? arr : SAMPLE_USERS;
+          const filled = arr;
           setUsers(filled);
           // initialize roles to Viewer by default
           const initial = {};
@@ -60,7 +60,7 @@ export default function PermissionsTable() {
     if (!filter) return users;
     const f = filter.toLowerCase();
     return users.filter(
-      (u) => u.name?.toLowerCase().includes(f) || u.email?.toLowerCase().includes(f)
+      (u) => u.name?.toLowerCase()?.includes(f) || u.email?.toLowerCase()?.includes(f)
     );
   }, [users, filter]);
 
