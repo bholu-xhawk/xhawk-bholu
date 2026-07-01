@@ -11,7 +11,10 @@ describe('App', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Home/)).toBeInTheDocument();
+    // Ensure the Home nav link is present
+    expect(screen.getByRole('link', { name: /^Home$/i })).toBeInTheDocument();
+    // And the Home page heading renders by default
     expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument();
   });
 });
+
