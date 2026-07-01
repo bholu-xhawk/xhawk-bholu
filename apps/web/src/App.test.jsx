@@ -11,7 +11,9 @@ describe('App', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Home/)).toBeInTheDocument();
+    // Ensure the Home navigation link exists
+    expect(screen.getByRole('link', { name: /^Home$/i })).toBeInTheDocument();
+    // Ensure the Home page heading is rendered by default route
     expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument();
   });
 });
