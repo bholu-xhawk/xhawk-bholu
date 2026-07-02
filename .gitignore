@@ -5,9 +5,17 @@ node_modules/
 dist/
 coverage/
 
+# Playwright artifacts
+playwright-report/
+blob-report/
+test-results/
+
 # Env files
 .env
 
 # Logs
 npm-debug.log*
 yarn-error.log*
+
+# Ignore web app lockfile generated during CI runs
+apps/web/package-lock.json
