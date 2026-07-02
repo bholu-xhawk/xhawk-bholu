@@ -7,6 +7,12 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "test": "node -e \"console.log('No tests specified')\"",
+    "test:e2e": "npm --prefix apps/web ci --no-fund --no-audit && npx playwright install --with-deps && npx playwright test",
+    "e2e:report": "npx playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
   }
 }
+
