@@ -6,7 +6,7 @@ Base path: /api
 
 Authentication
 - All routes below require Authorization: Bearer <JWT> header
-- Obtain a token via POST /api/auth/signup and POST /api/auth/login
+- Create an account via POST /api/auth/signup; obtain a token via POST /api/auth/login
 
 Routes
 - GET /api/users
@@ -20,7 +20,7 @@ Routes
   - Create a user
   - Body: { email: string (email), password: string (min 8), name?: string }
   - 201 Created: { id, email, name, createdAt, updatedAt }
-  - 422 for validation errors or if email already in use
+  - 422 for validation errors or if email already in use; 500 if a duplicate slips between pre-check and create
 - PUT /api/users/:id
   - Update a user (partial)
   - Body: { email?: string (email), password?: string (min 8), name?: string|null }
@@ -41,7 +41,7 @@ Local testing
   - pnpm -C apps/api prisma:generate && pnpm -C apps/api prisma:push
   - pnpm -C apps/api test
 - Start the API locally:
-  - node apps/api/src/server.js (or pnpm -C apps/api start)
+  - pnpm -C apps/api start (or cd apps/api && node src/server.js)
 
 Environment
 - DATABASE_URL: Prisma datasource (SQLite by default)
