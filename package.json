@@ -7,6 +7,9 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "build": "pnpm -C apps/api run build",
+    "test": "node -e \"console.log('No tests specified')\"",
+    "api:dev": "pnpm -C apps/api run dev",
+    "api:start": "pnpm -C apps/api run start"
   }
 }
