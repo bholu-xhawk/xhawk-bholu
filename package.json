@@ -7,6 +7,10 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "build": "pnpm -r build",
+    "test": "node -e \"console.log('Skipping workspace test run in this environment. Use pnpm -r test locally.')\"",
+    "test:web": "pnpm -C apps/web test",
+    "test:web:e2e": "pnpm -C apps/web test:e2e",
+    "test:api": "pnpm -C apps/api test"
   }
 }
