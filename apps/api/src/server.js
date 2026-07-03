@@ -4,11 +4,21 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 
 const app = express();
+const prisma = require('./prisma');
 
 app.use(express.json());
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
+});
+
+app.get('/api/db/health', async (req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({ db: 'ok' });
+  } catch (err) {
+    res.status(500).json({ error: 'Database not reachable', details: err?.message || String(err) });
+  }
 });
 
 app.use('/api', authRoutes);
