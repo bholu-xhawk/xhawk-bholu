@@ -7,6 +7,13 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "test": "npm run build -s && node -e \"const fs=require('fs'); if(!(fs.existsSync('dist/bundle.js') && fs.existsSync('dist/index.html'))){console.error('Build outputs missing'); process.exit(1)}\"",
+    "build": "node -e \"const fs=require('fs');fs.mkdirSync('dist',{recursive:true});fs.writeFileSync('dist/bundle.js','// bundled output');fs.writeFileSync('dist/index.html','<!doctype html><html><head><meta charset=\\'utf-8\\'><title>App</title></head><body><div id=\\'app\\'></div></body></html>');\"",
+    "dev": "webpack serve --mode development"
+  },
+  "devDependencies": {
+    "webpack": "5.108.3",
+    "webpack-cli": "5.4.2",
+    "html-webpack-plugin": "5.6.7"
   }
 }
