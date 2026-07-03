@@ -7,6 +7,17 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "test": "node -e \"console.log('No tests specified')\"",
+    "build": "webpack --mode production",
+    "dev": "webpack serve --mode development"
+  },
+  "devDependencies": {
+    "webpack": "5.108.3",
+    "webpack-cli": "4.2.0",
+    "webpack-dev-server": "4.0.0",
+    "html-webpack-plugin": "5.0.2",
+    "css-loader": "5.7.1",
+    "style-loader": "6.9.5"
   }
 }
+
