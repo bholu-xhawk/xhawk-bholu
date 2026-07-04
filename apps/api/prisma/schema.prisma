@@ -16,4 +16,17 @@ model User {
   passwordHash String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  todos        Todo[]
 }
+
+model Todo {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  done        Boolean   @default(false)
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
