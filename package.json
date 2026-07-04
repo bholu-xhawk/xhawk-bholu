@@ -7,6 +7,6 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "test": "node --test tests/api.test.js"
   }
 }

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Todos</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 2rem; }
+    h1 { margin-bottom: 1rem; }
+    #new-todo { width: 300px; padding: 0.5rem; }
+    button { padding: 0.5rem 0.75rem; margin-left: 0.5rem; }
+    ul { list-style: none; padding: 0; }
+    li { display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0; }
+    .text { flex: 1; }
+    .completed { text-decoration: line-through; color: #666; }
+    .error { color: #b00; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Todo List</h1>
+
+  <div>
+    <input id="new-todo" type="text" placeholder="What needs to be done?" />
+    <button id="add-btn">Add</button>
+    <div id="error" class="error" aria-live="polite"></div>
+  </div>
+
+  <ul id="list"></ul>
+
+  <script>
+    const listEl = document.getElementById('list');
+    const inputEl = document.getElementById('new-todo');
+    const addBtn = document.getElementById('add-btn');
+    const errorEl = document.getElementById('error');
+
+    async function fetchTodos() {
+      const res = await fetch('/api/todos');
+      const items = await res.json();
+      render(items);
+    }
+
+    function render(items) {
+      listEl.innerHTML = '';
+      items.forEach(item => {
+        const li = document.createElement('li');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = !!item.completed;
+        checkbox.addEventListener('change', async () => {
+          await fetch(`/api/todos/${item.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ completed: checkbox.checked })
+          });
+          fetchTodos();
+        });
+
+        const span = document.createElement('span');
+        span.className = 'text' + (item.completed ? ' completed' : '');
+        span.textContent = item.text;
+
+        const del = document.createElement('button');
+        del.textContent = 'Delete';
+        del.addEventListener('click', async () => {
+          await fetch(`/api/todos/${item.id}`, { method: 'DELETE' });
+          fetchTodos();
+        });
+
+        li.appendChild(checkbox);
+        li.appendChild(span);
+        li.appendChild(del);
+        listEl.appendChild(li);
+      });
+    }
+
+    addBtn.addEventListener('click', async () => {
+      const text = inputEl.value.trim();
+      errorEl.textContent = '';
+      if (!text) {
+        errorEl.textContent = 'Please enter a todo.';
+        return;
+      }
+      const res = await fetch('/api/todos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        errorEl.textContent = data.error || 'Failed to add todo';
+        return;
+      }
+      inputEl.value = '';
+      fetchTodos();
+    });
+
+    // Initial load
+    fetchTodos();
+  </script>
+</body>
+</html>
