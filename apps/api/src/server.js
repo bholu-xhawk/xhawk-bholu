@@ -13,6 +13,8 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
+const todoRoutes = require('./routes/todos');
+app.use('/api', todoRoutes);
 
 // 404 handler for /api
 app.use('/api', (req, res) => {
