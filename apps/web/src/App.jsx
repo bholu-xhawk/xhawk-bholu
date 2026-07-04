@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
+import Shop from './pages/Shop.jsx';
+import Cart from './pages/Cart.jsx';
 
 export default function App() {
   return (
@@ -14,14 +16,23 @@ export default function App() {
           <li>
             <Link className="text-blue-600 hover:underline" to="/about">About</Link>
           </li>
+          <li>
+            <Link className="text-blue-600 hover:underline" to="/shop">Shop</Link>
+          </li>
+          <li>
+            <Link className="text-blue-600 hover:underline" to="/cart">Cart</Link>
+          </li>
         </ul>
       </nav>
       <main className="p-6">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </main>
     </div>
   );
 }
+
