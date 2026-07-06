@@ -11,3 +11,7 @@ coverage/
 # Logs
 npm-debug.log*
 yarn-error.log*
+
+# Lockfiles (avoid including generated files in PRs)
+**/package-lock.json
+

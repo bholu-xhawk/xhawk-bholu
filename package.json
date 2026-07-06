@@ -7,6 +7,8 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "build": "npm --prefix apps/web run build",
+    "test": "npm --prefix apps/web test"
   }
 }
+

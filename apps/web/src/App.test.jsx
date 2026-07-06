@@ -11,7 +11,10 @@ describe('App', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Home/)).toBeInTheDocument();
+    // Assert the Home link in the navigation exists
+    expect(screen.getByRole('link', { name: /Home/i })).toBeInTheDocument();
+    // Assert the Home page heading exists
     expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument();
   });
 });
+
