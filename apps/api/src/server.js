@@ -14,6 +14,10 @@ app.get('/api/health', (req, res) => {
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 
+// mount students routes
+const studentRoutes = require('./routes/students');
+app.use('/api', studentRoutes);
+
 // 404 handler for /api
 app.use('/api', (req, res) => {
   res.status(404).json({ error: 'Not found' });
