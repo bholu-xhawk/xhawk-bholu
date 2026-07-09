@@ -1,10 +1,17 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const todoRoutes = require('./routes/todos');
 
 const app = express();
 
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(express.json());
 
 app.get('/api/health', (req, res) => {
@@ -13,6 +20,7 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
+app.use('/api', todoRoutes);
 
 // 404 handler for /api
 app.use('/api', (req, res) => {
