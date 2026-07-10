@@ -17,7 +17,8 @@ const updateUserSchema = z.object({
   password: z.string().min(8).optional(),
 });
 
-router.use(auth);
+// Apply auth only to /users routes to avoid affecting other /api endpoints
+router.use('/users', auth);
 
 router.get('/users', async (req, res) => {
   const users = await prisma.user.findMany({
