@@ -3,6 +3,8 @@ const path = require('path');
 
 const DATA_FILE = path.join(__dirname, '..', 'data', 'todos.json');
 
+let CACHE = null;
+
 function ensureDir() {
   const dir = path.dirname(DATA_FILE);
   try {
@@ -13,25 +15,42 @@ function ensureDir() {
 }
 
 function load() {
+  if (CACHE !== null) return CACHE;
   ensureDir();
   try {
     if (!fs.existsSync(DATA_FILE)) {
-      return [];
+      CACHE = [];
+      return CACHE;
     }
     const raw = fs.readFileSync(DATA_FILE, 'utf8');
-    if (!raw) return [];
+    if (!raw) {
+      CACHE = [];
+      return CACHE;
+    }
     const data = JSON.parse(raw);
-    if (!Array.isArray(data)) return [];
-    return data;
+    if (!Array.isArray(data)) {
+      CACHE = [];
+      return CACHE;
+    }
+    CACHE = data;
+    return CACHE;
   } catch (e) {
-    return [];
+    CACHE = [];
+    return CACHE;
   }
 }
 
 function save(todos) {
+  CACHE = todos;
   ensureDir();
-  const json = JSON.stringify(todos, null, 2);
-  fs.writeFileSync(DATA_FILE, json, 'utf8');
+  const json = JSON.stringify(CACHE, null, 2);
+  const tmp = DATA_FILE + '.tmp';
+  try {
+    fs.writeFileSync(tmp, json, 'utf8');
+    fs.renameSync(tmp, DATA_FILE);
+  } catch (e) {
+    // ignore
+  }
 }
 
 function nextId(todos) {
