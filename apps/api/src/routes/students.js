@@ -16,7 +16,7 @@ const createStudentSchema = z.object({
 const updateStudentSchema = z.object({
   name: z.string().min(1).optional(),
   age: z.number().int().nonnegative().optional(),
-});
+}).refine((data) => data.name !== undefined || data.age !== undefined, { message: 'At least one of name or age must be provided' });
 
 router.use(auth);
 
