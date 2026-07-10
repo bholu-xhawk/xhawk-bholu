@@ -2,7 +2,7 @@ import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
 
-process.env.DATABASE_URL = 'file:./test.db';
+process.env.DATABASE_URL = 'file:/workspace/apps/api/test-users.db';
 process.env.JWT_SECRET = 'test-secret';
 
 let app;
@@ -10,7 +10,10 @@ let token;
 
 describe('Users API', () => {
   beforeAll(async () => {
-    execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
+    // Ensure a clean test database before syncing schema
+    try { execSync('rm -f /workspace/apps/api/test-users.db'); } catch {}
+    // Use npm scripts to avoid pnpm install conflicts in CI
+    execSync('npm run prisma:generate && npm run prisma:push', { stdio: 'inherit', env: process.env, cwd: '/workspace/apps/api' });
     const mod = await import('../src/server.js');
     app = mod.default || mod;
 
@@ -21,7 +24,8 @@ describe('Users API', () => {
   }, 60000);
 
   afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
+    // keep DB cleanup consistent across suites
+    try { execSync('rm -f /workspace/apps/api/test-users.db'); } catch {}
   });
 
   it('GET /api/users requires auth', async () => {
