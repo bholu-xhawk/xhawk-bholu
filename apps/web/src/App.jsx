@@ -5,18 +5,18 @@ import About from './pages/About.jsx';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      <nav className="p-4 bg-white shadow">
-        <ul className="flex gap-4">
+    <div className="min-h-screen bg-slate-100 text-slate-900">
+      <nav className="bg-white/90 px-6 py-4 shadow-sm backdrop-blur">
+        <ul className="mx-auto flex max-w-5xl gap-5 text-sm font-medium">
           <li>
-            <Link className="text-blue-600 hover:underline" to="/">Home</Link>
+            <Link className="text-emerald-700 hover:text-emerald-900" to="/">Todos</Link>
           </li>
           <li>
-            <Link className="text-blue-600 hover:underline" to="/about">About</Link>
+            <Link className="text-slate-600 hover:text-slate-900" to="/about">About</Link>
           </li>
         </ul>
       </nav>
-      <main className="p-6">
+      <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -25,3 +25,4 @@ export default function App() {
     </div>
   );
 }
+
