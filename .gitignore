@@ -1,9 +1,12 @@
 # Node dependencies
 node_modules/
+package-lock.json
 
 # Build and dist outputs
 dist/
 coverage/
+*.db
+*.db-journal
 
 # Env files
 .env

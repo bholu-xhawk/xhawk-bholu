@@ -4,3 +4,83 @@
 
 html, body, #root { height: 100%; }
 body { margin: 0; }
+
+@layer components {
+  .todo-page {
+    @apply flex min-h-[calc(100vh-64px)] items-center justify-center bg-gradient-to-br from-emerald-50 via-slate-100 to-teal-100 px-4 py-10;
+  }
+
+  .todo-card {
+    @apply w-full max-w-md rounded-[2rem] bg-white p-7 shadow-2xl shadow-emerald-900/10;
+  }
+
+  .todo-header {
+    @apply mb-6 flex items-start justify-between gap-4;
+  }
+
+  .todo-day {
+    @apply text-sm font-semibold uppercase tracking-[0.25em] text-emerald-600;
+  }
+
+  .todo-heading {
+    @apply mt-1 text-3xl font-bold text-slate-900;
+  }
+
+  .todo-date {
+    @apply rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700;
+  }
+
+  .todo-error {
+    @apply mb-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700;
+  }
+
+  .todo-list-wrap {
+    @apply min-h-40;
+  }
+
+  .todo-list {
+    @apply space-y-3;
+  }
+
+  .todo-item {
+    @apply flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3;
+  }
+
+  .todo-complete-button {
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-emerald-300 bg-white text-sm font-bold text-white transition hover:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2;
+  }
+
+  .todo-complete-button--done {
+    @apply border-emerald-500 bg-emerald-500 text-white;
+  }
+
+  .todo-title {
+    @apply flex-1 text-base font-medium text-slate-800;
+  }
+
+  .todo-title--done {
+    @apply text-slate-400 line-through;
+  }
+
+  .todo-delete-button {
+    @apply flex h-8 w-8 items-center justify-center rounded-full text-xl leading-none text-slate-300 transition hover:bg-red-50 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-offset-2;
+  }
+
+  .todo-form {
+    @apply mt-6 flex gap-3;
+  }
+
+  .todo-input {
+    @apply min-w-0 flex-1 rounded-2xl border border-slate-200 px-4 py-3 text-base outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100 disabled:bg-slate-100;
+  }
+
+  .todo-add-button {
+    @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-500 text-3xl font-light leading-none text-white shadow-lg shadow-emerald-500/30 transition hover:bg-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-200 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none;
+  }
+
+  .todo-muted,
+  .todo-empty {
+    @apply rounded-2xl border border-dashed border-slate-200 px-4 py-8 text-center text-sm text-slate-500;
+  }
+}
+
