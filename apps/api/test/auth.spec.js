@@ -2,7 +2,9 @@ import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
 
-process.env.DATABASE_URL = 'file:./test.db';
+const databaseFile = `auth-${process.pid}.test.db`;
+
+process.env.DATABASE_URL = `file:./${databaseFile}`;
 process.env.JWT_SECRET = 'test-secret';
 
 let app;
@@ -15,7 +17,7 @@ describe('Auth API', () => {
   }, 60000);
 
   afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
+    try { execSync(`rm -f ./${databaseFile} ./${databaseFile}-journal ./prisma/${databaseFile} ./prisma/${databaseFile}-journal`); } catch {}
   });
 
   it('signup succeeds with valid email/password', async () => {

@@ -29,6 +29,10 @@ flowchart LR
     D -. error .-> K
 ```
 
+## API Documentation
+
+- Todo API: todo_api.md
+
 ## Flow Index
 
 - Planning State Machine: flows/planning_state_machine.md
