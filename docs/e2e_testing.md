@@ -8,7 +8,7 @@ From the repository root:
 
 ```sh
 pnpm install
-pnpm --filter web exec playwright install chromium
+pnpm --filter web exec playwright install --with-deps chromium
 ```
 
 The browser binaries are installed locally by Playwright and are not committed to the repository.
