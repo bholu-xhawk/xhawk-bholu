@@ -3,15 +3,22 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 
+jest.mock('./api/todos.js', () => ({
+  listTodos: jest.fn(() => Promise.resolve([])),
+  createTodo: jest.fn(),
+  updateTodo: jest.fn(),
+  deleteTodo: jest.fn(),
+}));
+
 describe('App', () => {
-  it('renders Home link in navigation and Home heading by default', () => {
+  it('renders Todos link in navigation and Todos heading by default', async () => {
     render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Home/)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Todos/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /Todos/i })).toBeInTheDocument();
   });
 });
