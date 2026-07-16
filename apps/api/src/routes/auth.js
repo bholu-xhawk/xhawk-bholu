@@ -8,11 +8,11 @@ const router = express.Router();
 
 router.post('/signup', async (req, res, next) => {
   try {
-    const { email, password, isAdmin } = req.body || {};
+    const { email, password } = req.body || {};
     if (!email || !password) {
       return res.status(400).json({ error: 'email and password are required' });
     }
-    const user = await createUser({ email, password, isAdmin: !!isAdmin });
+    const user = await createUser({ email, password });
     const token = signToken(user);
     res.status(201).json({ token, user });
   } catch (err) {

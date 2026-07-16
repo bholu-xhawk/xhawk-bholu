@@ -22,7 +22,7 @@ describe('Auth endpoints', () => {
     const email = randEmail();
     await request(app).post('/api/auth/signup').send({ email, password: 'a' }).expect(201);
     const res = await request(app).post('/api/auth/signup').send({ email, password: 'a' }).expect(422);
-    expect(res.body.error).toMatch(/exists/i);
+    expect(res.body.error).toMatch(/already in use|exists/i);
   });
 
   test('login with wrong password returns 422', async () => {

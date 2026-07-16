@@ -1,1 +1,186 @@
-[]
+[
+  {
+    "id": "945e715c-4e0e-448f-84e9-b305911f0800",
+    "email": "u1@test.local",
+    "passwordHash": "$2a$10$gfbZxwGVts7KyHXF/mS7Fep7bWeIGvTz.2L4YnkVAidcalHovtzda",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:17:15.818Z",
+    "updatedAt": "2026-07-16T16:17:15.818Z"
+  },
+  {
+    "id": "15fa0271-76e7-4b38-9f4a-6e56bd54e394",
+    "email": "user_l7nxsczoaj@test.local",
+    "passwordHash": "$2a$10$4GA0ac9LzSWm/WgRb7cbve3XCTS2RuFYXs3bzoG/aBsvEeSmFjGJW",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:17:15.827Z",
+    "updatedAt": "2026-07-16T16:17:15.827Z"
+  },
+  {
+    "id": "f4deedc9-f841-4386-b419-8b515f0f6a6a",
+    "email": "user_ut9g6vlri9@test.local",
+    "passwordHash": "$2a$10$8RpgBwWdWwqlCftOLSPE5uGrH8rPDpzHCxe.uAGx/lDtG7oMBAFyC",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:17:15.919Z",
+    "updatedAt": "2026-07-16T16:17:15.919Z"
+  },
+  {
+    "id": "ccd6ed2e-7d49-4ef3-abb2-ddc99776aa82",
+    "email": "user_uu64i8dvugi@test.local",
+    "passwordHash": "$2a$10$kB4bQ.yNNyV0TMKuBRtDI.rGqSbYhI4ivzYkBJ8cKQXXGuJZ.FkPa",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:17:16.091Z",
+    "updatedAt": "2026-07-16T16:17:16.091Z"
+  },
+  {
+    "id": "b6339b76-9658-4cfb-b1c9-853336b2ffec",
+    "email": "user_8snbe0j1iyp@test.local",
+    "passwordHash": "$2a$10$WwTbsI7sWMPJl5v52Ri5POjitD3jK54Nxz3lfSsHUi7F4xSWfOm1W",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:17:16.258Z",
+    "updatedAt": "2026-07-16T16:17:16.258Z"
+  },
+  {
+    "id": "e3c5904f-f209-44bd-b7df-af1c74b0d4af",
+    "email": "u1_ptqgmfsl6w@test.local",
+    "passwordHash": "$2a$10$s3AxIdnHFVPD6ZQLXtjJOuQCDsdO97tsNjLkcJPsKSk35obfc/FFa",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:22:54.672Z",
+    "updatedAt": "2026-07-16T16:22:54.672Z"
+  },
+  {
+    "id": "52c65283-16bd-4755-9a0b-85821983687e",
+    "email": "user_e7olai3cvgr@test.local",
+    "passwordHash": "$2a$10$W45SvUom03IZg/z3juKFROfvCa2c2j5XeXNYCF6.jLIjQSstp3cw6",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:22:54.676Z",
+    "updatedAt": "2026-07-16T16:22:54.676Z"
+  },
+  {
+    "id": "3e0c87a6-eaad-43f8-9f5d-d51947d82fc1",
+    "email": "admin_l1kwwovrd6l@test.local",
+    "passwordHash": "$2a$10$9tGd.L.hPfKoYWoWbUkz0e7KrylaQWPfczxuCllIksUHdjv14Z3kK",
+    "isAdmin": true,
+    "createdAt": "2026-07-16T16:22:54.768Z",
+    "updatedAt": "2026-07-16T16:22:54.770Z"
+  },
+  {
+    "id": "ff7a3651-9cf0-4056-ac39-b4704f5a903f",
+    "email": "user_t3rwpo4n4d@test.local",
+    "passwordHash": "$2a$10$w7ckQIG/z1v4Gi1lmalwqeKxiv8dfhAFAh9o3TIZuc6rmZQDeLMly",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:22:54.851Z",
+    "updatedAt": "2026-07-16T16:22:54.851Z"
+  },
+  {
+    "id": "3aa57839-2079-4cc7-9288-857bb59d0d15",
+    "email": "user_rfl8uk6g5aq@test.local",
+    "passwordHash": "$2a$10$aAU0fq8/kFTr7tYVcFf7wO44PcYrEn5VFTiDeYATCl0cWebX4wa4m",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:22:54.935Z",
+    "updatedAt": "2026-07-16T16:22:54.935Z"
+  },
+  {
+    "id": "7865e278-e533-460e-a390-0597e65ef442",
+    "email": "user_5074rr1t8k5@test.local",
+    "passwordHash": "$2a$10$PqXbZYMXvToDgMHvNFjvceIv.4K1XyoZADAGkdd92D710kw0IMzJy",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:22:55.102Z",
+    "updatedAt": "2026-07-16T16:22:55.102Z"
+  },
+  {
+    "id": "de9400fa-1010-47dd-9163-9b4dac88bc60",
+    "email": "user_q0ykb4bc9q@test.local",
+    "passwordHash": "$2a$10$FlLzySyLRz30oI8AMIzX6ukPJl1VZVFc2UYp/ej.NAicLlPZraPw6",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:23:11.390Z",
+    "updatedAt": "2026-07-16T16:23:11.390Z"
+  },
+  {
+    "id": "b455b45a-487f-4919-9f2e-a4833a106c0b",
+    "email": "user_h34ywozi01@test.local",
+    "passwordHash": "$2a$10$sZ4GlHJcXRUojT9.thLlkeDuMlKIr.fM1v5IlfXiASqos4zTg5mwq",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:23:11.482Z",
+    "updatedAt": "2026-07-16T16:23:11.482Z"
+  },
+  {
+    "id": "3e32bbf3-ab9a-4bad-8e70-91feb78ead90",
+    "email": "user_omhtf4athd8@test.local",
+    "passwordHash": "$2a$10$2GsFCKdik583WqIHsYidKu8ZhY6u6J6n/A8Jk3ZP5FUS83sxAcWRW",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:23:11.658Z",
+    "updatedAt": "2026-07-16T16:23:11.658Z"
+  },
+  {
+    "id": "0d82ea24-25ae-44b6-bf9a-be4799539783",
+    "email": "user_nod9t1krkwc@test.local",
+    "passwordHash": "$2a$10$UK472D/b/5eUtUYRWwZpreSx9M8XvacI5.Qfv/3BNcYgb4O/fnQ/e",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:23:11.824Z",
+    "updatedAt": "2026-07-16T16:23:11.824Z"
+  },
+  {
+    "id": "72c65cd8-68f7-4c67-9147-5bd41332b0db",
+    "email": "u1_f0gda33pjuq@test.local",
+    "passwordHash": "$2a$10$C4J0reV3PsNoayGOWLu8Sub.NXMfVYQhoLmyh5BIlFQBpXkmKwW2G",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:23:12.229Z",
+    "updatedAt": "2026-07-16T16:23:12.229Z"
+  },
+  {
+    "id": "9e22418d-a9a7-458c-b620-12816dac6bba",
+    "email": "admin_la0qig84qq@test.local",
+    "passwordHash": "$2a$10$gA.K22T5LeFuHZQklWG9SecsB/kUoNGPlrYrte68IeSpfTfFiuD5a",
+    "isAdmin": true,
+    "createdAt": "2026-07-16T16:23:12.321Z",
+    "updatedAt": "2026-07-16T16:23:12.323Z"
+  },
+  {
+    "id": "9b453597-c6aa-42d6-b9c8-61ec903bdbf1",
+    "email": "user_mbjuep0477l@test.local",
+    "passwordHash": "$2a$10$L.5K9hjcHBi6BFoGf.9I1epsEGteRvegkegx/vN7RMCIkSGNJ25xS",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:23:27.386Z",
+    "updatedAt": "2026-07-16T16:23:27.386Z"
+  },
+  {
+    "id": "06652e8b-e21b-40ac-9085-bcbf85d4e9a2",
+    "email": "user_0jspxxg02pzl@test.local",
+    "passwordHash": "$2a$10$PnAg.MkAFg5NFfgaeigIoeqC9/DJIKuiRuFMJOgFmWq7dkKM3mhey",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:23:27.485Z",
+    "updatedAt": "2026-07-16T16:23:27.485Z"
+  },
+  {
+    "id": "20dd3b72-78cf-49d9-9958-faf396a7cb1d",
+    "email": "user_vbvawmx6yy@test.local",
+    "passwordHash": "$2a$10$6RgiMLuoPVzA7X6VqkY.CeLPFtCAWAsf6jKsBjSIt/IREMcDjK3Ku",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:23:27.662Z",
+    "updatedAt": "2026-07-16T16:23:27.662Z"
+  },
+  {
+    "id": "a0afeeba-2c05-4bcb-8ba0-bbdf15ef654a",
+    "email": "user_6mzxk5nn6y@test.local",
+    "passwordHash": "$2a$10$ZgOJRCmYzt08eteWv.sU3.S7/fAfcoHjRcN0QED//9ZhHEIpdo.Cu",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:23:27.830Z",
+    "updatedAt": "2026-07-16T16:23:27.830Z"
+  },
+  {
+    "id": "bdc4ec17-7946-4d56-93bf-b7bee9fe104b",
+    "email": "u1_pffqea0mgel@test.local",
+    "passwordHash": "$2a$10$3d6u/JazOlHUM/W5Emdj3.5Ho/iQydnq0A9anwRFxLX7WUikVNg52",
+    "isAdmin": false,
+    "createdAt": "2026-07-16T16:23:28.249Z",
+    "updatedAt": "2026-07-16T16:23:28.249Z"
+  },
+  {
+    "id": "7c5be381-a816-4121-b0cd-11293b98bbca",
+    "email": "admin_orlw40tuw8m@test.local",
+    "passwordHash": "$2a$10$.8V2aAZrC/dV1HFnzemUcOa7agdFn3YqomrUxmwAijSranaTjCfqC",
+    "isAdmin": true,
+    "createdAt": "2026-07-16T16:23:28.343Z",
+    "updatedAt": "2026-07-16T16:23:28.346Z"
+  }
+]

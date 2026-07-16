@@ -2,7 +2,9 @@ import jwt from 'jsonwebtoken';
 import { getUserRecordById, stripSensitive } from '../store/users.js';
 
 const DEFAULT_SECRET = 'dev-secret-change-me';
-const JWT_SECRET = process.env.JWT_SECRET || DEFAULT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || (['development', 'test'].includes(process.env.NODE_ENV) ? DEFAULT_SECRET : (() => {
+  throw new Error('JWT_SECRET must be configured');
+})());
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 export function signToken(user) {

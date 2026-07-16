@@ -31,7 +31,7 @@ export function createApp() {
 
 export const app = createApp();
 
-if (import.meta.main) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const PORT = process.env.PORT || 3001;
   app.listen(PORT, () => {
     console.log(`API server listening on http://localhost:${PORT}`);
