@@ -7,3 +7,4 @@
 ## Documentation
 
 - Internal Agent/System Flows index: [docs/README.md](docs/README.md)
+- End-to-end testing: [docs/e2e_testing.md](docs/e2e_testing.md)

@@ -2,11 +2,14 @@
   "name": "workspace",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "build": "pnpm --filter @workspace/api build && pnpm --filter web build",
+    "test": "pnpm --filter web test -- --runInBand && pnpm --filter @workspace/api test",
+    "e2e": "pnpm --filter web test:e2e"
   }
 }
