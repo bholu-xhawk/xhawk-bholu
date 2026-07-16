@@ -4,9 +4,14 @@ node_modules/
 # Build and dist outputs
 dist/
 coverage/
+playwright-report/
+test-results/
 
 # Env files
 .env
+
+# Local test databases
+*.db
 
 # Logs
 npm-debug.log*
