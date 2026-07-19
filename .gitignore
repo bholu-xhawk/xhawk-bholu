@@ -5,6 +5,9 @@ node_modules/
 dist/
 coverage/
 
+# Test databases
+apps/api/prisma/test.db
+
 # Env files
 .env
 
