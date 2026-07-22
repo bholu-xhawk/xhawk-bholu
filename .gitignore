@@ -5,6 +5,10 @@ node_modules/
 dist/
 coverage/
 
+# Generated SQLite databases
+*.db
+*.db-journal
+
 # Env files
 .env
 

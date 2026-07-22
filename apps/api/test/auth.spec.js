@@ -1,21 +1,30 @@
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
+import { rmSync } from 'node:fs';
+import path from 'node:path';
 
-process.env.DATABASE_URL = 'file:./test.db';
+const dbPath = path.join(process.cwd(), 'prisma', `auth.${process.pid}.test.db`);
+process.env.DATABASE_URL = `file:${dbPath}`;
 process.env.JWT_SECRET = 'test-secret';
+
+function removeTestDb() {
+  rmSync(dbPath, { force: true });
+  rmSync(`${dbPath}-journal`, { force: true });
+}
 
 let app;
 
 describe('Auth API', () => {
   beforeAll(async () => {
+    removeTestDb();
     execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
     const mod = await import('../src/server.js');
     app = mod.default || mod;
   }, 60000);
 
   afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
+    removeTestDb();
   });
 
   it('signup succeeds with valid email/password', async () => {

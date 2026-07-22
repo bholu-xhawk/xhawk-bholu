@@ -4,14 +4,16 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 
 describe('App', () => {
-  it('renders Home link in navigation and Home heading by default', () => {
+  it('renders navigation and Home heading by default', () => {
     render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Home/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Home/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /About/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Todos/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument();
   });
 });
