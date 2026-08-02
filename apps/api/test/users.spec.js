@@ -38,11 +38,64 @@ describe('Users API', () => {
     expect(res.body).not.toHaveProperty('passwordHash');
   });
 
+  it('GET /api/users lists users without password hashes', async () => {
+    const created = await request(app)
+      .post('/api/users')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ email: 'list-user@example.com', password: 'password123', name: 'List User' })
+      .expect(201);
+
+    const res = await request(app)
+      .get('/api/users')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(res.body).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: created.body.id, email: 'list-user@example.com', name: 'List User' }),
+      ]),
+    );
+    expect(res.body.find((user) => user.id === created.body.id)).not.toHaveProperty('passwordHash');
+  });
+
+  it('GET /api/users/:id returns an existing user without password hash', async () => {
+    const created = await request(app)
+      .post('/api/users')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ email: 'read-user@example.com', password: 'password123', name: 'Read User' })
+      .expect(201);
+
+    const res = await request(app)
+      .get(`/api/users/${created.body.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(res.body).toMatchObject({ id: created.body.id, email: 'read-user@example.com', name: 'Read User' });
+    expect(res.body).not.toHaveProperty('passwordHash');
+  });
+
   it('GET /api/users/:id for nonexistent id returns 404', async () => {
     await request(app)
       .get('/api/users/9999')
       .set('Authorization', `Bearer ${token}`)
       .expect(404);
+  });
+
+  it('PUT /api/users/:id updates an existing user without returning password hash', async () => {
+    const created = await request(app)
+      .post('/api/users')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ email: 'update-user@example.com', password: 'password123', name: 'Old Name' })
+      .expect(201);
+
+    const res = await request(app)
+      .put(`/api/users/${created.body.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ email: 'updated-user@example.com', password: 'newpassword123', name: 'Updated Name' })
+      .expect(200);
+
+    expect(res.body).toMatchObject({ id: created.body.id, email: 'updated-user@example.com', name: 'Updated Name' });
+    expect(res.body).not.toHaveProperty('passwordHash');
   });
 
   it('PUT /api/users/:id validates payload and returns 422 on invalid email', async () => {
