@@ -2,11 +2,28 @@
   "name": "workspace",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.24.0",
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "test": "node -e \"console.log('No tests specified')\"",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "bcrypt",
+      "esbuild",
+      "prisma"
+    ]
   }
 }
+
