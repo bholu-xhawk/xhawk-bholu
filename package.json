@@ -2,11 +2,21 @@
   "name": "workspace",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "workspaces": [
+    "apps/*"
+  ],
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm test --workspaces --if-present",
+    "test:unit": "npm test --workspaces --if-present",
+    "test:e2e": "npm run test:e2e --workspace web --"
+  },
+  "devDependencies": {
+    "pnpm": "^9.15.9"
   }
 }

@@ -2,6 +2,7 @@
 
 ## Test Plan
 
+- Testing Guide: [docs/testing.md](docs/testing.md)
 - New Planning State Machine Test Plan: [docs/test_plan_planning_state_machine.md](docs/test_plan_planning_state_machine.md)
 
 ## Documentation
