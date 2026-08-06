@@ -1,28 +1,28 @@
 import request from 'supertest';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
 
 process.env.DATABASE_URL = 'file:./test.db';
 process.env.JWT_SECRET = 'test-secret';
 
 let app;
+let prisma;
 let token;
 
 describe('Users API', () => {
   beforeAll(async () => {
     execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
     const mod = await import('../src/server.js');
+    const prismaMod = await import('../src/prisma.js');
     app = mod.default || mod;
+    prisma = prismaMod.default || prismaMod;
+    await prisma.user.deleteMany();
 
     // Create a user and token for auth
     await request(app).post('/api/auth/signup').send({ email: 'admin@example.com', password: 'password123' });
     const res = await request(app).post('/api/auth/login').send({ email: 'admin@example.com', password: 'password123' });
     token = res.body.token;
   }, 60000);
-
-  afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
-  });
 
   it('GET /api/users requires auth', async () => {
     await request(app).get('/api/users').expect(401);
