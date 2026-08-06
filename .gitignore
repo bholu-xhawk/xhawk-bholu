@@ -5,6 +5,10 @@ node_modules/
 dist/
 coverage/
 
+# Test databases
+*.db
+*.db-journal
+
 # Env files
 .env
 
