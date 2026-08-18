@@ -2,17 +2,26 @@ import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
 
-process.env.DATABASE_URL = 'file:./test.db';
+const databaseFile = `users-${process.pid}.test.db`;
+process.env.DATABASE_URL = `file:./${databaseFile}`;
 process.env.JWT_SECRET = 'test-secret';
 
 let app;
 let token;
+let prisma;
+
+const cleanupDb = () => {
+  execSync(`rm -f ./${databaseFile} ./prisma/${databaseFile}`, { stdio: 'ignore' });
+};
 
 describe('Users API', () => {
   beforeAll(async () => {
+    cleanupDb();
     execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
     const mod = await import('../src/server.js');
     app = mod.default || mod;
+    const prismaMod = await import('../src/prisma.js');
+    prisma = prismaMod.default || prismaMod;
 
     // Create a user and token for auth
     await request(app).post('/api/auth/signup').send({ email: 'admin@example.com', password: 'password123' });
@@ -20,8 +29,9 @@ describe('Users API', () => {
     token = res.body.token;
   }, 60000);
 
-  afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
+  afterAll(async () => {
+    await prisma?.$disconnect();
+    cleanupDb();
   });
 
   it('GET /api/users requires auth', async () => {
