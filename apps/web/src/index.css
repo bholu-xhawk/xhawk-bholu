@@ -2,5 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root { height: 100%; }
-body { margin: 0; }
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.book-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.book-table th,
+.book-table td {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 1rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.book-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.book-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.status-message {
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  background: #eef2ff;
+  color: #3730a3;
+  padding: 0.875rem 1rem;
+}
+
+.status-message--error {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.empty-state {
+  color: #64748b;
+  text-align: center;
+}
+
+.star-button {
+  align-items: center;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 9999px;
+  color: #9a3412;
+  display: inline-flex;
+  font-weight: 700;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.star-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
