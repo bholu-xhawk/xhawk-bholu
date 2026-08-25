@@ -11,7 +11,7 @@ import App from './App.jsx';
 import { fetchBooks, updateBookStarred } from './api/books.js';
 
 jest.mock('./api/books.js', () => ({
-  BOOKS_API_BASE_URL: 'http://localhost:8000',
+  BOOKS_API_BASE_URL: 'http://localhost:3001/api',
   fetchBooks: jest.fn(),
   updateBookStarred: jest.fn(),
 }));

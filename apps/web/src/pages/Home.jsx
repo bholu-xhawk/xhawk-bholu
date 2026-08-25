@@ -35,7 +35,7 @@ export default function Home() {
 
   async function handleToggleStar(book) {
     const nextStarred = !book.starred;
-    const previousBooks = books;
+    const previousStarred = book.starred;
 
     setActionError('');
     setUpdatingBookIds((current) => new Set(current).add(book.id));
@@ -55,7 +55,13 @@ export default function Home() {
         )
       );
     } catch (error) {
-      setBooks(previousBooks);
+      setBooks((currentBooks) =>
+        currentBooks.map((currentBook) =>
+          currentBook.id === book.id
+            ? { ...currentBook, starred: previousStarred }
+            : currentBook
+        )
+      );
       setActionError(
         error.message || 'Unable to update the starred state. Please try again.'
       );

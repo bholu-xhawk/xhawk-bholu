@@ -22,8 +22,8 @@ describe('books API client', () => {
     });
   }
 
-  it('exports the configured books API base URL with the localhost default', () => {
-    expect(BOOKS_API_BASE_URL).toBe('http://localhost:8000');
+  it('exports the configured books API base URL with the default backend API base URL', () => {
+    expect(BOOKS_API_BASE_URL).toBe('http://localhost:3001/api');
   });
 
   it('normalizes book fields, author arrays, author strings, variants, and defaults', () => {
@@ -84,7 +84,7 @@ describe('books API client', () => {
     ]);
 
     expect(globalThis.fetch).toHaveBeenCalledWith(
-      'http://localhost:8000/books',
+      'http://localhost:3001/api/books',
       {
         headers: { Accept: 'application/json' },
       }
@@ -114,7 +114,7 @@ describe('books API client', () => {
     });
 
     expect(globalThis.fetch).toHaveBeenCalledWith(
-      'http://localhost:8000/books/book%201/star',
+      'http://localhost:3001/api/books/book%201/star',
       {
         method: 'PATCH',
         body: JSON.stringify({ starred: true }),
