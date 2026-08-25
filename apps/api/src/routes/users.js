@@ -17,6 +17,49 @@ const updateUserSchema = z.object({
   password: z.string().min(8).optional(),
 });
 
+function parsePositiveInteger(value, defaultValue) {
+  if (value === undefined) return defaultValue;
+  if (typeof value !== 'string' || !/^\d+$/.test(value)) return null;
+  const parsed = Number(value);
+  return parsed >= 1 ? parsed : null;
+}
+
+router.get('/users/directory', async (req, res) => {
+  const page = parsePositiveInteger(req.query.page, 1);
+  const pageSize = parsePositiveInteger(req.query.page_size, 10);
+
+  if (page === null || pageSize === null) {
+    return res.status(400).json({ error: 'Invalid pagination parameters' });
+  }
+
+  const [total, users] = await Promise.all([
+    prisma.user.count(),
+    prisma.user.findMany({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      select: { id: true, name: true, email: true },
+      orderBy: { id: 'asc' },
+    }),
+  ]);
+  const totalPages = Math.ceil(total / pageSize);
+
+  return res.json({
+    users: users.map((user) => ({
+      id: user.id,
+      name: user.name,
+      emailDomain: user.email.slice(user.email.indexOf('@') + 1),
+    })),
+    pagination: {
+      page,
+      page_size: pageSize,
+      total,
+      total_pages: totalPages,
+      has_next: page < totalPages,
+      has_prev: page > 1,
+    },
+  });
+});
+
 router.use(auth);
 
 router.get('/users', async (req, res) => {
