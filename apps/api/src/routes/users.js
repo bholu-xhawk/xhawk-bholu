@@ -5,6 +5,16 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
+const parsePositiveInteger = (value, defaultValue) => {
+  if (value === undefined) return defaultValue;
+  if (Array.isArray(value)) return null;
+  if (!/^\d+$/.test(String(value))) return null;
+  const number = Number(value);
+  return Number.isSafeInteger(number) && number > 0 ? number : null;
+};
+
+const getEmailDomain = (email) => email.split('@')[1] || '';
+
 const createUserSchema = z.object({
   email: z.string().email(),
   name: z.string().optional(),
@@ -15,6 +25,39 @@ const updateUserSchema = z.object({
   email: z.string().email().optional(),
   name: z.string().nullable().optional(),
   password: z.string().min(8).optional(),
+});
+
+router.get('/users/directory', async (req, res) => {
+  const page = parsePositiveInteger(req.query.page, 1);
+  const pageSize = parsePositiveInteger(req.query.pageSize, 20);
+
+  if (page === null || pageSize === null || pageSize > 100) {
+    return res.status(400).json({ error: 'Invalid pagination parameters' });
+  }
+
+  const [users, totalCount] = await Promise.all([
+    prisma.user.findMany({
+      select: { id: true, email: true, name: true },
+      orderBy: { id: 'asc' },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.user.count(),
+  ]);
+
+  res.json({
+    data: users.map((user) => ({
+      id: user.id,
+      name: user.name,
+      emailDomain: getEmailDomain(user.email),
+    })),
+    pagination: {
+      page,
+      pageSize,
+      totalCount,
+      totalPages: Math.ceil(totalCount / pageSize),
+    },
+  });
 });
 
 router.use(auth);
