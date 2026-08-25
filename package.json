@@ -2,11 +2,15 @@
   "name": "workspace",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/web"
+  ],
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
+    "build": "npm --workspace web run build",
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "test": "npm --workspace web test -- --runInBand"
   }
 }
