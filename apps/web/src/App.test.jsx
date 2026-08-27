@@ -5,9 +5,7 @@ import App from './App.jsx';
 
 function renderApp() {
   render(
-    <BrowserRouter
-      future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
-    >
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   );

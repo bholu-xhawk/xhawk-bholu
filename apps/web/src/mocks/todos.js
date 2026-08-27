@@ -1,6 +1,6 @@
 // Frontend-only todo seed data used by the home page.
 
-export const mockTodos = [
+export const todoSeedItems = [
   {
     id: 1,
     title: 'Review the project brief',

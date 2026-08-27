@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import Home from './Home.jsx';
-import { mockTodos } from '../mocks/todos.js';
+import { todoSeedItems } from '../mocks/todos.js';
 
 function renderHome() {
   render(<Home />);
@@ -21,7 +21,7 @@ describe('Home', () => {
     expect(
       screen.getByRole('heading', { name: /Todo App/i })
     ).toBeInTheDocument();
-    for (const todo of mockTodos) {
+    for (const todo of todoSeedItems) {
       expect(screen.getByText(todo.title)).toBeInTheDocument();
     }
     expect(
@@ -47,16 +47,30 @@ describe('Home', () => {
     ).not.toBeChecked();
   });
 
-  it('ignores empty todo submissions', () => {
+  it('disables adding while the trimmed todo input is empty', () => {
     renderHome();
 
-    addTodo('   ');
+    const input = screen.getByLabelText(/New todo/i);
+    const addButton = screen.getByRole('button', { name: /Add todo/i });
 
-    expect(screen.getAllByRole('listitem')).toHaveLength(mockTodos.length);
-    expect(screen.getByLabelText(/New todo/i)).toHaveValue('   ');
+    expect(addButton).toBeDisabled();
+
+    fireEvent.change(input, {
+      target: { value: '   ' },
+    });
+    expect(addButton).toBeDisabled();
+    fireEvent.click(addButton);
+
+    expect(screen.getAllByRole('listitem')).toHaveLength(todoSeedItems.length);
+    expect(input).toHaveValue('   ');
     expect(
       screen.getByText('3 total · 2 active · 1 completed')
     ).toBeInTheDocument();
+
+    fireEvent.change(input, {
+      target: { value: '  Schedule demo  ' },
+    });
+    expect(addButton).toBeEnabled();
   });
 
   it('toggles a todo completed state in the UI', () => {

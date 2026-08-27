@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { mockTodos } from '../mocks/todos.js';
-
-function cloneTodo(todo) {
-  return { ...todo };
-}
+import React, { useRef, useState } from 'react';
+import { todoSeedItems } from '../mocks/todos.js';
 
 export default function Home() {
-  const [todos, setTodos] = useState(() => mockTodos.map(cloneTodo));
+  const nextTodoId = useRef(
+    todoSeedItems.reduce((maxId, todo) => Math.max(maxId, todo.id), 0) + 1
+  );
+  const [todos, setTodos] = useState(() =>
+    todoSeedItems.map((todo) => ({ ...todo }))
+  );
   const [newTodoTitle, setNewTodoTitle] = useState('');
 
   const completedCount = todos.filter((todo) => todo.completed).length;
   const activeCount = todos.length - completedCount;
+  const isAddDisabled = newTodoTitle.trim().length === 0;
 
   function handleAddTodo(event) {
     event.preventDefault();
@@ -20,11 +22,13 @@ export default function Home() {
       return;
     }
 
-    setTodos((currentTodos) => {
-      const nextId =
-        currentTodos.reduce((maxId, todo) => Math.max(maxId, todo.id), 0) + 1;
-      return [...currentTodos, { id: nextId, title, completed: false }];
-    });
+    const id = nextTodoId.current;
+    nextTodoId.current += 1;
+
+    setTodos((currentTodos) => [
+      ...currentTodos,
+      { id, title, completed: false },
+    ]);
     setNewTodoTitle('');
   }
 
@@ -67,7 +71,8 @@ export default function Home() {
           value={newTodoTitle}
         />
         <button
-          className="rounded-lg bg-blue-600 px-5 py-2 font-semibold text-white hover:bg-blue-700"
+          className="rounded-lg bg-blue-600 px-5 py-2 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
+          disabled={isAddDisabled}
           type="submit"
         >
           Add todo
