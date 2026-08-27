@@ -40,7 +40,7 @@ export default function Home() {
   async function handleAddTodo(event) {
     event.preventDefault();
     const trimmedTitle = title.trim();
-    if (!trimmedTitle) return;
+    if (isLoading || !trimmedTitle) return;
 
     try {
       setIsCreating(true);
@@ -122,14 +122,14 @@ export default function Home() {
           value={title}
           onChange={(event) => setTitle(event.target.value)}
           placeholder="Add a todo"
-          disabled={isCreating}
+          disabled={isLoading || isCreating}
         />
         <button
           className="rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
           type="submit"
-          disabled={isCreating || !title.trim()}
+          disabled={isLoading || isCreating || !title.trim()}
         >
-          {isCreating ? 'Adding…' : 'Add todo'}
+          {isLoading ? 'Loading…' : isCreating ? 'Adding…' : 'Add todo'}
         </button>
       </form>
 

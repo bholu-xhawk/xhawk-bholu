@@ -32,10 +32,12 @@ describe('Home', () => {
 
   afterEach(() => {
     delete window.__API_BASE_URL__;
+    delete window.__AUTH_TOKEN__;
     jest.restoreAllMocks();
   });
 
-  it('loads and displays todos', async () => {
+  it('loads and displays todos with a bearer token when one is available', async () => {
+    window.__AUTH_TOKEN__ = 'test-token';
     window.fetch.mockResolvedValueOnce(
       await mockJsonResponse([
         { id: 1, title: 'Buy milk', completed: false },
@@ -50,8 +52,34 @@ describe('Home', () => {
     expect(screen.getByText('Write tests')).toBeInTheDocument();
     expect(window.fetch).toHaveBeenCalledWith(
       'http://test.local/api/todos',
-      expect.objectContaining({ headers: {} })
+      expect.objectContaining({
+        headers: { Authorization: 'Bearer test-token' },
+      })
     );
+  });
+
+  it('prevents adding a todo while the initial load is in flight', async () => {
+    let resolveLoad;
+    const loadPromise = new Promise((resolve) => {
+      resolveLoad = () => resolve(mockJsonResponse([]));
+    });
+    window.fetch.mockReturnValueOnce(loadPromise);
+
+    render(<Home />);
+
+    const input = screen.getByLabelText(/New todo title/i);
+    const button = screen.getByRole('button', { name: /Loading/i });
+
+    expect(input).toBeDisabled();
+    expect(button).toBeDisabled();
+
+    fireEvent.change(input, { target: { value: 'Race task' } });
+    fireEvent.click(button);
+    expect(window.fetch).toHaveBeenCalledTimes(1);
+
+    resolveLoad();
+    await screen.findByText(/No todos yet/i);
+    expect(window.fetch).toHaveBeenCalledTimes(1);
   });
 
   it('adds a todo through the API', async () => {

@@ -39,16 +39,16 @@ npm --prefix apps/api run dev
 npm --prefix apps/web run dev
 ```
 
-The web Todo UI calls `http://localhost:3001/api` by default. Tests or local pages can override this with `window.__API_BASE_URL__`.
+The web Todo UI calls `http://localhost:3001/api` by default. Tests or local pages can override this with `window.__API_BASE_URL__`; authenticated calls send a bearer token from `window.__AUTH_TOKEN__` or `localStorage.authToken` when present.
 
 ## Todo API
 
-The public Todo resource is available at `/api/todos`:
+The authenticated Todo resource is available at `/api/todos`. Include `Authorization: Bearer <token>` from `/api/auth/login`; each user can only access their own todos.
 
-- `GET /api/todos` lists todos.
-- `POST /api/todos` creates a todo with `{ "title": "Task" }`.
-- `PATCH /api/todos/:id` updates completion with `{ "completed": true }`.
-- `DELETE /api/todos/:id` deletes a todo.
+- `GET /api/todos` lists the authenticated user's todos.
+- `POST /api/todos` creates a todo for the authenticated user with `{ "title": "Task" }`.
+- `PATCH /api/todos/:id` updates one of the authenticated user's todos with `{ "completed": true }`.
+- `DELETE /api/todos/:id` deletes one of the authenticated user's todos.
 
 CORS is enabled for the Vite dev server origin, `http://localhost:5173`, by default.
 

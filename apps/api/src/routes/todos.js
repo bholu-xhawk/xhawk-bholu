@@ -1,6 +1,7 @@
 const express = require('express');
 const { z } = require('zod');
 const prisma = require('../prisma');
+const auth = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -29,13 +30,20 @@ function parseId(idParam) {
   return Number.isInteger(id) && id > 0 ? id : null;
 }
 
-router.get('/todos', async (req, res) => {
-  const todos = await prisma.todo.findMany({
-    select: todoSelect,
-    orderBy: { id: 'asc' },
-  });
+router.use('/todos', auth);
 
-  res.json(todos);
+router.get('/todos', async (req, res) => {
+  try {
+    const todos = await prisma.todo.findMany({
+      where: { userId: req.user.id },
+      select: todoSelect,
+      orderBy: { id: 'asc' },
+    });
+
+    return res.json(todos);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to list todos' });
+  }
 });
 
 router.post('/todos', async (req, res) => {
@@ -48,7 +56,7 @@ router.post('/todos', async (req, res) => {
 
   try {
     const todo = await prisma.todo.create({
-      data: { title: parse.data.title },
+      data: { title: parse.data.title, userId: req.user.id },
       select: todoSelect,
     });
 
@@ -70,16 +78,22 @@ router.patch('/todos/:id', async (req, res) => {
   }
 
   try {
-    const todo = await prisma.todo.update({
-      where: { id },
+    const result = await prisma.todo.updateMany({
+      where: { id, userId: req.user.id },
       data: { completed: parse.data.completed },
+    });
+
+    if (result.count === 0) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+
+    const todo = await prisma.todo.findFirst({
+      where: { id, userId: req.user.id },
       select: todoSelect,
     });
 
     return res.json(todo);
   } catch (err) {
-    if (err.code === 'P2025')
-      return res.status(404).json({ error: 'Todo not found' });
     return res.status(500).json({ error: 'Failed to update todo' });
   }
 });
@@ -89,11 +103,16 @@ router.delete('/todos/:id', async (req, res) => {
   if (!id) return res.status(400).json({ error: 'Invalid id' });
 
   try {
-    await prisma.todo.delete({ where: { id } });
+    const result = await prisma.todo.deleteMany({
+      where: { id, userId: req.user.id },
+    });
+
+    if (result.count === 0) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+
     return res.status(204).send();
   } catch (err) {
-    if (err.code === 'P2025')
-      return res.status(404).json({ error: 'Todo not found' });
     return res.status(500).json({ error: 'Failed to delete todo' });
   }
 });

@@ -12,6 +12,18 @@ function buildUrl(path) {
   return `${getApiBaseUrl().replace(/\/$/, '')}${path}`;
 }
 
+function getAuthToken() {
+  if (typeof window === 'undefined') return '';
+
+  if (window.__AUTH_TOKEN__) return window.__AUTH_TOKEN__;
+
+  try {
+    return window.localStorage?.getItem('authToken') || '';
+  } catch {
+    return '';
+  }
+}
+
 async function parseResponse(response) {
   if (response.status === 204) return undefined;
 
@@ -26,10 +38,12 @@ async function parseResponse(response) {
 }
 
 async function request(path, options = {}) {
+  const token = getAuthToken();
   const response = await fetch(buildUrl(path), {
     ...options,
     headers: {
       ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     },
   });
