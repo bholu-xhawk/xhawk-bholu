@@ -17,7 +17,7 @@ const updateUserSchema = z.object({
   password: z.string().min(8).optional(),
 });
 
-router.use(auth);
+router.use('/users', auth);
 
 router.get('/users', async (req, res) => {
   const users = await prisma.user.findMany({
