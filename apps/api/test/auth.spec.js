@@ -1,21 +1,31 @@
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
+import { unlinkSync } from 'node:fs';
 
-process.env.DATABASE_URL = 'file:./test.db';
+process.env.DATABASE_URL = 'file:./test-auth.db';
 process.env.JWT_SECRET = 'test-secret';
 
 let app;
+let prisma;
 
 describe('Auth API', () => {
   beforeAll(async () => {
-    execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
+    execSync('npm run prisma:generate && npm run prisma:push', {
+      stdio: 'inherit',
+      env: process.env,
+    });
     const mod = await import('../src/server.js');
+    const prismaMod = await import('../src/prisma.js');
     app = mod.default || mod;
+    prisma = prismaMod.default || prismaMod;
   }, 60000);
 
-  afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
+  afterAll(async () => {
+    await prisma?.$disconnect();
+    try {
+      unlinkSync('./prisma/test-auth.db');
+    } catch {}
   });
 
   it('signup succeeds with valid email/password', async () => {

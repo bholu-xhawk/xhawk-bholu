@@ -1,27 +1,41 @@
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
+import { unlinkSync } from 'node:fs';
 
-process.env.DATABASE_URL = 'file:./test.db';
+process.env.DATABASE_URL = 'file:./test-users.db';
 process.env.JWT_SECRET = 'test-secret';
 
 let app;
+let prisma;
 let token;
 
 describe('Users API', () => {
   beforeAll(async () => {
-    execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
+    execSync('npm run prisma:generate && npm run prisma:push', {
+      stdio: 'inherit',
+      env: process.env,
+    });
     const mod = await import('../src/server.js');
+    const prismaMod = await import('../src/prisma.js');
     app = mod.default || mod;
+    prisma = prismaMod.default || prismaMod;
 
     // Create a user and token for auth
-    await request(app).post('/api/auth/signup').send({ email: 'admin@example.com', password: 'password123' });
-    const res = await request(app).post('/api/auth/login').send({ email: 'admin@example.com', password: 'password123' });
+    await request(app)
+      .post('/api/auth/signup')
+      .send({ email: 'admin@example.com', password: 'password123' });
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'admin@example.com', password: 'password123' });
     token = res.body.token;
   }, 60000);
 
-  afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
+  afterAll(async () => {
+    await prisma?.$disconnect();
+    try {
+      unlinkSync('./prisma/test-users.db');
+    } catch {}
   });
 
   it('GET /api/users requires auth', async () => {
@@ -32,7 +46,11 @@ describe('Users API', () => {
     const res = await request(app)
       .post('/api/users')
       .set('Authorization', `Bearer ${token}`)
-      .send({ email: 'user1@example.com', password: 'password123', name: 'User 1' })
+      .send({
+        email: 'user1@example.com',
+        password: 'password123',
+        name: 'User 1',
+      })
       .expect(201);
     expect(res.body).toHaveProperty('id');
     expect(res.body).not.toHaveProperty('passwordHash');
