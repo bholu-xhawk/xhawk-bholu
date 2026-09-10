@@ -150,6 +150,18 @@ describe('Todos API', () => {
     });
   });
 
+
+  it('rejects creating todos with a stale user token', async () => {
+    const token = await authHeader();
+    await prisma.user.deleteMany();
+
+    await request(app)
+      .post('/api/todos')
+      .set('Authorization', token)
+      .send({ title: 'Stale token task' })
+      .expect(401);
+  });
+
   it('toggles a todo completed state', async () => {
     const token = await authHeader();
     const created = await request(app)
@@ -206,6 +218,11 @@ describe('Todos API', () => {
       .expect(422);
     await request(app)
       .patch('/api/todos/nope')
+      .set('Authorization', token)
+      .send({ completed: true })
+      .expect(400);
+    await request(app)
+      .patch('/api/todos/999999999999999999999')
       .set('Authorization', token)
       .send({ completed: true })
       .expect(400);

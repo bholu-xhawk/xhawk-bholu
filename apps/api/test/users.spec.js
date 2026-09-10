@@ -1,4 +1,5 @@
 import request from 'supertest';
+import jwt from 'jsonwebtoken';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
 import { unlinkSync } from 'node:fs';
@@ -9,6 +10,8 @@ process.env.JWT_SECRET = 'test-secret';
 let app;
 let prisma;
 let token;
+let adminToken;
+let authUserId;
 
 describe('Users API', () => {
   beforeAll(async () => {
@@ -22,13 +25,18 @@ describe('Users API', () => {
     prisma = prismaMod.default || prismaMod;
 
     // Create a user and token for auth
-    await request(app)
+    const signup = await request(app)
       .post('/api/auth/signup')
       .send({ email: 'admin@example.com', password: 'password123' });
+    authUserId = signup.body.id;
     const res = await request(app)
       .post('/api/auth/login')
       .send({ email: 'admin@example.com', password: 'password123' });
     token = res.body.token;
+    adminToken = jwt.sign(
+      { id: authUserId, email: 'admin@example.com', role: 'admin' },
+      process.env.JWT_SECRET
+    );
   }, 60000);
 
   afterAll(async () => {
@@ -59,22 +67,43 @@ describe('Users API', () => {
   it('GET /api/users/:id for nonexistent id returns 404', async () => {
     await request(app)
       .get('/api/users/9999')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${adminToken}`)
       .expect(404);
   });
 
   it('PUT /api/users/:id validates payload and returns 422 on invalid email', async () => {
+    await request(app)
+      .put(`/api/users/${authUserId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ email: 'not-an-email' })
+      .expect(422);
+  });
+
+  it('prevents users from accessing another user by id', async () => {
     const created = await request(app)
       .post('/api/users')
       .set('Authorization', `Bearer ${token}`)
       .send({ email: 'user2@example.com', password: 'password123' })
       .expect(201);
     const id = created.body.id;
+
+    await request(app)
+      .get(`/api/users/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(403);
     await request(app)
       .put(`/api/users/${id}`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ email: 'not-an-email' })
-      .expect(422);
+      .send({ name: 'Not allowed' })
+      .expect(403);
+    await request(app)
+      .delete(`/api/users/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(403);
+    await request(app)
+      .get(`/api/users/${id}`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .expect(200);
   });
 
   it('DELETE /api/users/:id returns 204 and subsequent GET returns 404', async () => {
@@ -86,11 +115,11 @@ describe('Users API', () => {
     const id = created.body.id;
     await request(app)
       .delete(`/api/users/${id}`)
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${adminToken}`)
       .expect(204);
     await request(app)
       .get(`/api/users/${id}`)
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${adminToken}`)
       .expect(404);
   });
 });

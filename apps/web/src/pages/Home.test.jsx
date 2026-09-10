@@ -27,17 +27,19 @@ function mockNoContentResponse() {
 describe('Home', () => {
   beforeEach(() => {
     window.__API_BASE_URL__ = 'http://test.local/api';
+    window.__AUTH_TOKEN__ = 'test-token';
+    window.localStorage.clear();
     window.fetch = jest.fn();
   });
 
   afterEach(() => {
     delete window.__API_BASE_URL__;
     delete window.__AUTH_TOKEN__;
+    window.localStorage.clear();
     jest.restoreAllMocks();
   });
 
   it('loads and displays todos with a bearer token when one is available', async () => {
-    window.__AUTH_TOKEN__ = 'test-token';
     window.fetch.mockResolvedValueOnce(
       await mockJsonResponse([
         { id: 1, title: 'Buy milk', completed: false },
@@ -54,6 +56,52 @@ describe('Home', () => {
       'http://test.local/api/todos',
       expect.objectContaining({
         headers: { Authorization: 'Bearer test-token' },
+      })
+    );
+  });
+
+  it('signs in before loading todos when no token is available', async () => {
+    delete window.__AUTH_TOKEN__;
+    window.fetch
+      .mockResolvedValueOnce(await mockJsonResponse({ token: 'new-token' }))
+      .mockResolvedValueOnce(await mockJsonResponse([]));
+
+    render(<Home />);
+
+    expect(
+      screen.getByRole('heading', { name: /Sign in/i })
+    ).toBeInTheDocument();
+    expect(window.fetch).not.toHaveBeenCalled();
+
+    fireEvent.change(screen.getByLabelText(/Email/i), {
+      target: { value: 'user@example.com' },
+    });
+    fireEvent.change(screen.getByLabelText(/Password/i), {
+      target: { value: 'password123' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /^Sign in$/i }));
+
+    expect(
+      await screen.findByRole('heading', { name: /Todos/i })
+    ).toBeInTheDocument();
+    expect(await screen.findByText(/No todos yet/i)).toBeInTheDocument();
+    expect(window.localStorage.getItem('authToken')).toBe('new-token');
+    expect(window.fetch).toHaveBeenNthCalledWith(
+      1,
+      'http://test.local/api/auth/login',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({
+          email: 'user@example.com',
+          password: 'password123',
+        }),
+      })
+    );
+    expect(window.fetch).toHaveBeenNthCalledWith(
+      2,
+      'http://test.local/api/todos',
+      expect.objectContaining({
+        headers: { Authorization: 'Bearer new-token' },
       })
     );
   });
@@ -106,7 +154,10 @@ describe('Home', () => {
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ title: 'New task' }),
-        headers: { 'Content-Type': 'application/json' },
+        headers: expect.objectContaining({
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer test-token',
+        }),
       })
     );
     expect(screen.getByLabelText(/New todo title/i)).toHaveValue('');

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { login, signup } from '../api/auth.js';
 import {
   createTodo,
   deleteTodo,
@@ -6,15 +7,35 @@ import {
   updateTodoCompleted,
 } from '../api/todos.js';
 
+function getInitialAuthToken() {
+  if (typeof window === 'undefined') return '';
+
+  if (window.__AUTH_TOKEN__) return window.__AUTH_TOKEN__;
+
+  try {
+    return window.localStorage?.getItem('authToken') || '';
+  } catch {
+    return '';
+  }
+}
+
 export default function Home() {
+  const [authToken, setAuthToken] = useState(getInitialAuthToken);
+  const [authMode, setAuthMode] = useState('login');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [authError, setAuthError] = useState('');
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(Boolean(authToken));
   const [isCreating, setIsCreating] = useState(false);
   const [pendingIds, setPendingIds] = useState(() => new Set());
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (!authToken) return undefined;
+
     let isMounted = true;
 
     async function loadTodos() {
@@ -35,7 +56,27 @@ export default function Home() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [authToken]);
+
+  async function handleAuthSubmit(event) {
+    event.preventDefault();
+    setIsAuthenticating(true);
+    setAuthError('');
+
+    try {
+      if (authMode === 'signup') {
+        await signup(email, password);
+      }
+
+      const result = await login(email, password);
+      window.localStorage?.setItem('authToken', result.token);
+      setAuthToken(result.token);
+    } catch (err) {
+      setAuthError(err.message || 'Unable to authenticate');
+    } finally {
+      setIsAuthenticating(false);
+    }
+  }
 
   async function handleAddTodo(event) {
     event.preventDefault();
@@ -95,6 +136,94 @@ export default function Home() {
         return nextIds;
       });
     }
+  }
+
+  if (!authToken) {
+    return (
+      <section className="mx-auto max-w-md space-y-6">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-wide text-blue-600">
+            Todo app
+          </p>
+          <h1 className="text-3xl font-bold">Sign in to view todos</h1>
+          <p className="mt-2 text-gray-600">
+            Sign in or create an account before managing your todos.
+          </p>
+        </div>
+
+        <form
+          className="space-y-4 rounded-lg bg-white p-4 shadow"
+          onSubmit={handleAuthSubmit}
+        >
+          <div>
+            <label className="block text-sm font-medium" htmlFor="auth-email">
+              Email
+            </label>
+            <input
+              id="auth-email"
+              className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              disabled={isAuthenticating}
+              required
+            />
+          </div>
+          <div>
+            <label
+              className="block text-sm font-medium"
+              htmlFor="auth-password"
+            >
+              Password
+            </label>
+            <input
+              id="auth-password"
+              className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              disabled={isAuthenticating}
+              minLength={8}
+              required
+            />
+          </div>
+
+          {authError ? (
+            <div
+              className="rounded border border-red-200 bg-red-50 p-3 text-red-700"
+              role="alert"
+            >
+              {authError}
+            </div>
+          ) : null}
+
+          <button
+            className="w-full rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
+            type="submit"
+            disabled={isAuthenticating}
+          >
+            {isAuthenticating
+              ? 'Signing in…'
+              : authMode === 'signup'
+                ? 'Sign up'
+                : 'Sign in'}
+          </button>
+          <button
+            className="w-full text-sm font-semibold text-blue-600 hover:underline"
+            type="button"
+            onClick={() => {
+              setAuthMode(authMode === 'signup' ? 'login' : 'signup');
+              setAuthError('');
+            }}
+            disabled={isAuthenticating}
+          >
+            {authMode === 'signup'
+              ? 'Already have an account? Sign in'
+              : 'Need an account? Sign up'}
+          </button>
+        </form>
+      </section>
+    );
   }
 
   return (

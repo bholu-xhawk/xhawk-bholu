@@ -17,6 +17,10 @@ const updateUserSchema = z.object({
   password: z.string().min(8).optional(),
 });
 
+function canAccessUser(req, id) {
+  return req.user?.id === id || req.user?.role === 'admin';
+}
+
 router.use('/users', auth);
 
 router.get('/users', async (req, res) => {
@@ -30,6 +34,7 @@ router.get('/users', async (req, res) => {
 router.get('/users/:id', async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: 'Invalid id' });
+  if (!canAccessUser(req, id)) return res.status(403).json({ error: 'Forbidden' });
   const user = await prisma.user.findUnique({
     where: { id },
     select: { id: true, email: true, name: true, createdAt: true, updatedAt: true },
@@ -60,6 +65,7 @@ router.post('/users', async (req, res) => {
 router.put('/users/:id', async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: 'Invalid id' });
+  if (!canAccessUser(req, id)) return res.status(403).json({ error: 'Forbidden' });
   const parse = updateUserSchema.safeParse(req.body);
   if (!parse.success) return res.status(422).json({ error: 'Invalid input', details: parse.error.flatten() });
   const { email, name, password } = parse.data;
@@ -88,6 +94,7 @@ router.put('/users/:id', async (req, res) => {
 router.delete('/users/:id', async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: 'Invalid id' });
+  if (!canAccessUser(req, id)) return res.status(403).json({ error: 'Forbidden' });
   try {
     await prisma.user.delete({ where: { id } });
     res.status(204).send();

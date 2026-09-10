@@ -13,10 +13,12 @@ function mockJsonResponse(body, status = 200) {
 
 describe('App', () => {
   beforeEach(() => {
+    window.__AUTH_TOKEN__ = 'test-token';
     window.fetch = jest.fn(() => mockJsonResponse([]));
   });
 
   afterEach(() => {
+    delete window.__AUTH_TOKEN__;
     jest.restoreAllMocks();
   });
 
