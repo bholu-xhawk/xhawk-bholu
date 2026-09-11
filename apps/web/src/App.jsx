@@ -9,10 +9,14 @@ export default function App() {
       <nav className="p-4 bg-white shadow">
         <ul className="flex gap-4">
           <li>
-            <Link className="text-blue-600 hover:underline" to="/">Home</Link>
+            <Link className="text-blue-600 hover:underline" to="/">
+              To-do app
+            </Link>
           </li>
           <li>
-            <Link className="text-blue-600 hover:underline" to="/about">About</Link>
+            <Link className="text-blue-600 hover:underline" to="/about">
+              About
+            </Link>
           </li>
         </ul>
       </nav>
