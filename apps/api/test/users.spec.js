@@ -2,7 +2,10 @@ import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
 
-process.env.DATABASE_URL = 'file:./test.db';
+const runId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+const emailFor = (name) => `${name}-${runId}@example.com`;
+
+process.env.DATABASE_URL = `file:./test-${runId}.db`;
 process.env.JWT_SECRET = 'test-secret';
 
 let app;
@@ -15,13 +18,13 @@ describe('Users API', () => {
     app = mod.default || mod;
 
     // Create a user and token for auth
-    await request(app).post('/api/auth/signup').send({ email: 'admin@example.com', password: 'password123' });
-    const res = await request(app).post('/api/auth/login').send({ email: 'admin@example.com', password: 'password123' });
+    await request(app).post('/api/auth/signup').send({ email: emailFor('admin'), password: 'password123' });
+    const res = await request(app).post('/api/auth/login').send({ email: emailFor('admin'), password: 'password123' });
     token = res.body.token;
   }, 60000);
 
   afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
+    try { execSync(`rm -f ./prisma/test-${runId}.db ./prisma/test-${runId}.db-*`); } catch {}
   });
 
   it('GET /api/users requires auth', async () => {
@@ -32,7 +35,7 @@ describe('Users API', () => {
     const res = await request(app)
       .post('/api/users')
       .set('Authorization', `Bearer ${token}`)
-      .send({ email: 'user1@example.com', password: 'password123', name: 'User 1' })
+      .send({ email: emailFor('user1'), password: 'password123', name: 'User 1' })
       .expect(201);
     expect(res.body).toHaveProperty('id');
     expect(res.body).not.toHaveProperty('passwordHash');
@@ -49,7 +52,7 @@ describe('Users API', () => {
     const created = await request(app)
       .post('/api/users')
       .set('Authorization', `Bearer ${token}`)
-      .send({ email: 'user2@example.com', password: 'password123' })
+      .send({ email: emailFor('user2'), password: 'password123' })
       .expect(201);
     const id = created.body.id;
     await request(app)
@@ -63,7 +66,7 @@ describe('Users API', () => {
     const created = await request(app)
       .post('/api/users')
       .set('Authorization', `Bearer ${token}`)
-      .send({ email: 'user3@example.com', password: 'password123' })
+      .send({ email: emailFor('user3'), password: 'password123' })
       .expect(201);
     const id = created.body.id;
     await request(app)
