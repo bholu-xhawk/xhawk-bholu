@@ -11,3 +11,7 @@ coverage/
 # Logs
 npm-debug.log*
 yarn-error.log*
+
+# Local API test/install artifacts
+apps/api/package-lock.json
+apps/api/prisma/test.db*
