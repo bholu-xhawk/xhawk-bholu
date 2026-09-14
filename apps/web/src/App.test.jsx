@@ -4,14 +4,49 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 
 describe('App', () => {
-  it('renders Home link in navigation and Home heading by default', () => {
+  beforeEach(() => {
+    window.history.pushState({}, '', '/');
+    window.localStorage.clear();
+  });
+
+  it('renders app navigation and Home heading by default', () => {
     render(
-      <BrowserRouter>
+      <BrowserRouter
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+      >
         <App />
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Home/)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /home/i })).toHaveAttribute(
+      'href',
+      '/'
+    );
+    expect(screen.getByRole('link', { name: /about/i })).toHaveAttribute(
+      'href',
+      '/about'
+    );
+    expect(screen.getByRole('link', { name: /todos/i })).toHaveAttribute(
+      'href',
+      '/todos'
+    );
+    expect(screen.getByRole('heading', { name: /home/i })).toBeInTheDocument();
+  });
+
+  it('renders the Todos page at /todos', () => {
+    window.history.pushState({}, '', '/todos');
+
+    render(
+      <BrowserRouter
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+      >
+        <App />
+      </BrowserRouter>
+    );
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: /^todos$/i })
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText(/new todo/i)).toBeInTheDocument();
   });
 });

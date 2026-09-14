@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
+import Todos from './pages/Todos.jsx';
 
 export default function App() {
   return (
@@ -9,10 +10,19 @@ export default function App() {
       <nav className="p-4 bg-white shadow">
         <ul className="flex gap-4">
           <li>
-            <Link className="text-blue-600 hover:underline" to="/">Home</Link>
+            <Link className="text-blue-600 hover:underline" to="/">
+              Home
+            </Link>
           </li>
           <li>
-            <Link className="text-blue-600 hover:underline" to="/about">About</Link>
+            <Link className="text-blue-600 hover:underline" to="/about">
+              About
+            </Link>
+          </li>
+          <li>
+            <Link className="text-blue-600 hover:underline" to="/todos">
+              Todos
+            </Link>
           </li>
         </ul>
       </nav>
@@ -20,6 +30,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/todos" element={<Todos />} />
         </Routes>
       </main>
     </div>
