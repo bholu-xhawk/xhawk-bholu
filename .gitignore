@@ -11,3 +11,6 @@ coverage/
 # Logs
 npm-debug.log*
 yarn-error.log*
+# Local SQLite databases
+*.db
+*.db-journal
