@@ -11,3 +11,7 @@ coverage/
 # Logs
 npm-debug.log*
 yarn-error.log*
+
+# Local test databases
+apps/api/prisma/test.db
+apps/api/prisma/test.db-*
