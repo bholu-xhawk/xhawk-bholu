@@ -7,6 +7,10 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
-  }
+    "test": "npm --workspace @workspace/api test",
+    "build": "npm --workspace @workspace/api run build"
+  },
+  "workspaces": [
+    "apps/*"
+  ]
 }
