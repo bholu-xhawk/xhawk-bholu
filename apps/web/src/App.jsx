@@ -6,17 +6,13 @@ import About from './pages/About.jsx';
 export default function App() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
-      <nav className="p-4 bg-white shadow">
-        <ul className="flex gap-4">
-          <li>
-            <Link className="text-blue-600 hover:underline" to="/">Home</Link>
-          </li>
-          <li>
-            <Link className="text-blue-600 hover:underline" to="/about">About</Link>
-          </li>
-        </ul>
+      <nav className="bg-white shadow" aria-label="Primary navigation">
+        <div className="mx-auto flex max-w-5xl items-center justify-between p-4">
+          <Link className="text-lg font-bold text-gray-950" to="/">Todo Workspace</Link>
+          <Link className="text-blue-600 hover:underline" to="/about">About</Link>
+        </div>
       </nav>
-      <main className="p-6">
+      <main className="mx-auto max-w-5xl p-6">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
