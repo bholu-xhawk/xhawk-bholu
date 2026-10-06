@@ -2,11 +2,19 @@
   "name": "workspace",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "dev:api": "npm --workspace @workspace/api run dev",
+    "dev:web": "npm --workspace web run dev",
+    "build": "npm --workspace @workspace/api run build && npm --workspace web run build",
+    "test": "npm --workspace @workspace/api test && npm --workspace web test -- --runInBand",
+    "prisma:generate": "npm --workspace @workspace/api run prisma:generate",
+    "prisma:push": "npm --workspace @workspace/api run prisma:push"
   }
 }
