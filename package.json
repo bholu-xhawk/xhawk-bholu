@@ -2,11 +2,16 @@
   "name": "workspace",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "build": "npm run build --workspace @workspace/api && npm run build --workspace web",
+    "test": "npm test --workspace @workspace/api && npm test --workspace web -- --runInBand",
+    "lint": "npm run lint --workspace web"
   }
 }
