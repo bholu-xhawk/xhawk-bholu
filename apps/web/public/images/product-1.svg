@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Graphite daypack front view</title>
+  <desc id="desc">A graphite backpack with bright blue zipper pulls on a pale blue background.</desc>
+  <rect width="800" height="600" fill="#dbeafe"/>
+  <circle cx="640" cy="120" r="70" fill="#93c5fd" opacity="0.55"/>
+  <path d="M280 145h240c58 0 105 47 105 105v250c0 38-31 69-69 69H244c-38 0-69-31-69-69V250c0-58 47-105 105-105Z" fill="#1f2937"/>
+  <path d="M302 118h196c33 0 60 27 60 60v15H242v-15c0-33 27-60 60-60Z" fill="#374151"/>
+  <path d="M260 245h280v245H260z" fill="#111827" opacity="0.45"/>
+  <path d="M318 270h164c28 0 50 22 50 50v150H268V320c0-28 22-50 50-50Z" fill="#4b5563"/>
+  <path d="M330 312h140" stroke="#60a5fa" stroke-width="18" stroke-linecap="round"/>
+  <path d="M520 336l42 38-42 38" fill="none" stroke="#3b82f6" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M231 260c-47 43-70 111-70 204" stroke="#374151" stroke-width="30" stroke-linecap="round" fill="none"/>
+  <path d="M569 260c47 43 70 111 70 204" stroke="#374151" stroke-width="30" stroke-linecap="round" fill="none"/>
+</svg>
