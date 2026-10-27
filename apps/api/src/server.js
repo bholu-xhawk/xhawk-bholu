@@ -2,28 +2,37 @@ require('dotenv').config();
 const express = require('express');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const { publicApiRateLimit } = require('./middleware/rateLimit');
 
-const app = express();
+function createApp({ apiRateLimit = publicApiRateLimit() } = {}) {
+  const app = express();
 
-app.use(express.json());
+  app.use(express.json());
 
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
+  app.use('/api', apiRateLimit);
 
-app.use('/api', authRoutes);
-app.use('/api', userRoutes);
+  app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok' });
+  });
 
-// 404 handler for /api
-app.use('/api', (req, res) => {
-  res.status(404).json({ error: 'Not found' });
-});
+  app.use('/api', authRoutes);
+  app.use('/api', userRoutes);
 
-// centralized error handler
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ error: 'Internal server error' });
-});
+  // 404 handler for /api
+  app.use('/api', (req, res) => {
+    res.status(404).json({ error: 'Not found' });
+  });
+
+  // centralized error handler
+  app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  });
+
+  return app;
+}
+
+const app = createApp();
 
 const port = process.env.PORT || 3001;
 if (require.main === module) {
@@ -33,3 +42,4 @@ if (require.main === module) {
 }
 
 module.exports = app; // export for testing
+module.exports.createApp = createApp;
