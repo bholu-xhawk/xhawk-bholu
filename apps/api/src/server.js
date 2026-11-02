@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const imageRoutes = require('./routes/images');
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.use('/api', imageRoutes);
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 
