@@ -11,3 +11,7 @@ coverage/
 # Logs
 npm-debug.log*
 yarn-error.log*
+
+# Prisma SQLite databases
+*.db
+*.db-journal
