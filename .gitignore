@@ -4,6 +4,8 @@ node_modules/
 # Build and dist outputs
 dist/
 coverage/
+*.db
+*.db-journal
 
 # Env files
 .env
