@@ -2,11 +2,15 @@
   "name": "workspace",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/api"
+  ],
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "build": "npm run build --workspace @workspace/api",
+    "test": "npm test --workspace @workspace/api"
   }
 }
