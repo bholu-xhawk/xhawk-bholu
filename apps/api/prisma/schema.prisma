@@ -14,6 +14,19 @@ model User {
   email        String   @unique
   name         String?
   passwordHash String
+  todos        Todo[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model Todo {
+  id        Int      @id @default(autoincrement())
+  title     String
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, completed, createdAt])
 }
