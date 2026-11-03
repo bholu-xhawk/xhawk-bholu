@@ -9,13 +9,13 @@ let app;
 
 describe('Auth API', () => {
   beforeAll(async () => {
-    execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
+    execSync('npm run prisma:generate && npm run prisma:push', { stdio: 'inherit', env: process.env });
     const mod = await import('../src/server.js');
     app = mod.default || mod;
   }, 60000);
 
   afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
+    try { execSync('rm -f ./prisma/test.db ./test.db'); } catch {}
   });
 
   it('signup succeeds with valid email/password', async () => {
