@@ -1,16 +1,23 @@
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
+import { rmSync } from 'node:fs';
 
-process.env.DATABASE_URL = 'file:./test.db';
+process.env.DATABASE_URL = 'file:./users-test.db';
 process.env.JWT_SECRET = 'test-secret';
+
+function removeDatabase() {
+  rmSync('./prisma/users-test.db', { force: true });
+  rmSync('./prisma/users-test.db-journal', { force: true });
+}
 
 let app;
 let token;
 
 describe('Users API', () => {
   beforeAll(async () => {
-    execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
+    removeDatabase();
+    execSync('npx prisma generate && npx prisma db push', { stdio: 'inherit', cwd: process.cwd(), env: process.env });
     const mod = await import('../src/server.js');
     app = mod.default || mod;
 
@@ -21,7 +28,7 @@ describe('Users API', () => {
   }, 60000);
 
   afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
+    removeDatabase();
   });
 
   it('GET /api/users requires auth', async () => {
