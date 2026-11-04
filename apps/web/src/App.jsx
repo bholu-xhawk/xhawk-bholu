@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
+import CustomerForm from './pages/CustomerForm.jsx';
 
 export default function App() {
   return (
@@ -20,6 +21,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/customers/new" element={<CustomerForm />} />
+          <Route path="/customers/:id/edit" element={<CustomerForm />} />
         </Routes>
       </main>
     </div>
