@@ -11,3 +11,7 @@ coverage/
 # Logs
 npm-debug.log*
 yarn-error.log*
+
+# Prisma SQLite databases created by local/test runs
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
