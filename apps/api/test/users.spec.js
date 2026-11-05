@@ -1,18 +1,32 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
 
-process.env.DATABASE_URL = 'file:./test.db';
+process.env.DATABASE_URL = 'file:./users-test.db';
 process.env.JWT_SECRET = 'test-secret';
 
+const dbPath = path.resolve(process.cwd(), 'prisma/users-test.db');
+
 let app;
+let prisma;
 let token;
+
+function removeTestDb() {
+  for (const file of [dbPath, `${dbPath}-journal`, `${dbPath}-wal`, `${dbPath}-shm`]) {
+    if (fs.existsSync(file)) fs.rmSync(file, { force: true });
+  }
+}
 
 describe('Users API', () => {
   beforeAll(async () => {
-    execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
+    removeTestDb();
+    execSync('npm run prisma:generate && npm run prisma:push', { stdio: 'inherit', env: process.env });
     const mod = await import('../src/server.js');
+    const prismaMod = await import('../src/prisma.js');
     app = mod.default || mod;
+    prisma = prismaMod.default || prismaMod;
 
     // Create a user and token for auth
     await request(app).post('/api/auth/signup').send({ email: 'admin@example.com', password: 'password123' });
@@ -20,8 +34,9 @@ describe('Users API', () => {
     token = res.body.token;
   }, 60000);
 
-  afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
+  afterAll(async () => {
+    if (prisma) await prisma.$disconnect();
+    removeTestDb();
   });
 
   it('GET /api/users requires auth', async () => {
