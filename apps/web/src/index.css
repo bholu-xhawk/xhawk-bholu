@@ -2,5 +2,160 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root { height: 100%; }
-body { margin: 0; }
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  margin: 0;
+}
+
+.customer-form-page {
+  display: flex;
+  justify-content: center;
+}
+
+.customer-form-card {
+  width: min(100%, 42rem);
+  padding: 2rem;
+  border: 1px solid #dbe4f0;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 1rem 2rem rgba(15, 23, 42, 0.08);
+}
+
+.customer-form-header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.customer-form-header h1 {
+  margin: 0.25rem 0 0;
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  line-height: 1.1;
+}
+
+.customer-form-eyebrow,
+.customer-form-help {
+  margin: 0;
+  color: #475569;
+  font-size: 0.925rem;
+}
+
+.customer-form-eyebrow {
+  color: #2563eb;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.customer-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.customer-field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.customer-field label {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.customer-field input {
+  width: 100%;
+  border: 1px solid #94a3b8;
+  border-radius: 0.65rem;
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+}
+
+.customer-field input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+  outline: none;
+}
+
+.customer-field input[aria-invalid='true'] {
+  border-color: #dc2626;
+}
+
+.customer-field input:disabled {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.field-error,
+.request-error {
+  margin: 0;
+  color: #b91c1c;
+}
+
+.field-error {
+  font-size: 0.9rem;
+}
+
+.request-error {
+  border: 1px solid #fecaca;
+  border-radius: 0.65rem;
+  background: #fef2f2;
+  padding: 0.75rem 0.85rem;
+}
+
+.customer-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.customer-button {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0.75rem 1.25rem;
+}
+
+.customer-button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+  outline: none;
+}
+
+.customer-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.customer-button-primary {
+  background: #2563eb;
+  color: #fff;
+}
+
+.customer-button-secondary {
+  border-color: #cbd5e1;
+  background: #fff;
+  color: #1e293b;
+}
+
+@media (max-width: 40rem) {
+  .customer-form-card {
+    padding: 1.25rem;
+  }
+
+  .customer-form-header,
+  .customer-form-actions {
+    flex-direction: column;
+  }
+
+  .customer-button {
+    width: 100%;
+  }
+}
