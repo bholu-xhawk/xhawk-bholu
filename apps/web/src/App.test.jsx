@@ -11,7 +11,21 @@ describe('App', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Home/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Home/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument();
+  });
+
+  it('registers the customer create route', () => {
+    window.history.pushState({}, '', '/customers/new');
+
+    render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+
+    expect(
+      screen.getByRole('heading', { name: /new customer/i })
+    ).toBeInTheDocument();
   });
 });
