@@ -59,7 +59,7 @@ router.get('/customers', async (req, res, next) => {
     : {};
 
   try {
-    const [total, items] = await Promise.all([
+    const [total, items] = await prisma.$transaction([
       prisma.customer.count({ where }),
       prisma.customer.findMany({
         where,

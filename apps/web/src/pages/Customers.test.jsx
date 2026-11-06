@@ -1,6 +1,8 @@
 import React from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import Customers from './Customers.jsx';
+import { AuthProvider, AUTH_TOKEN_KEY } from '../auth.jsx';
 import { listCustomers } from '../api/customers.js';
 
 jest.mock('../api/customers.js', () => ({
@@ -36,9 +38,21 @@ function deferred() {
   return { promise, resolve, reject };
 }
 
+function renderCustomers() {
+  window.localStorage.setItem(AUTH_TOKEN_KEY, 'test-token');
+  return render(
+    <MemoryRouter>
+      <AuthProvider>
+        <Customers />
+      </AuthProvider>
+    </MemoryRouter>
+  );
+}
+
 describe('Customers page', () => {
   beforeEach(() => {
     jest.useFakeTimers();
+    window.localStorage.clear();
     listCustomers.mockReset();
   });
 
@@ -51,7 +65,7 @@ describe('Customers page', () => {
     const request = deferred();
     listCustomers.mockReturnValueOnce(request.promise);
 
-    render(<Customers />);
+    renderCustomers();
 
     expect(screen.getByRole('status')).toHaveTextContent('Loading customers');
     expect(listCustomers).toHaveBeenCalledWith(expect.objectContaining({ search: '', sort: 'signedUpAt', direction: 'desc', page: 1 }));
@@ -68,7 +82,7 @@ describe('Customers page', () => {
 
   it('debounces search and sends trimmed server search parameters', async () => {
     listCustomers.mockResolvedValue(envelope());
-    render(<Customers />);
+    renderCustomers();
     await screen.findByText('No customers yet.');
 
     fireEvent.change(screen.getByLabelText(/Search customers/i), { target: { value: '  ada@example  ' } });
@@ -89,7 +103,7 @@ describe('Customers page', () => {
 
   it('toggles sorting and resets to page one', async () => {
     listCustomers.mockResolvedValue(envelope([customer()], { total: 40, totalPages: 2 }));
-    render(<Customers />);
+    renderCustomers();
     await screen.findByText('Ada Lovelace');
 
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
@@ -106,7 +120,7 @@ describe('Customers page', () => {
 
   it('navigates pages and disables impossible pagination actions', async () => {
     listCustomers.mockResolvedValue(envelope([customer()], { page: 1, total: 25, totalPages: 2 }));
-    render(<Customers />);
+    renderCustomers();
     await screen.findByText('Ada Lovelace');
 
     expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
@@ -120,9 +134,28 @@ describe('Customers page', () => {
     expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
   });
 
+
+
+  it('moves back to the last available page when the current page becomes out of range', async () => {
+    listCustomers
+      .mockResolvedValueOnce(envelope([customer()], { page: 1, total: 25, totalPages: 2 }))
+      .mockResolvedValueOnce(envelope([], { page: 2, total: 20, totalPages: 1 }))
+      .mockResolvedValueOnce(envelope([customer({ name: 'Remaining Customer' })], { page: 1, total: 20, totalPages: 1 }));
+
+    renderCustomers();
+    await screen.findByText('Ada Lovelace');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+    await waitFor(() => expect(listCustomers).toHaveBeenCalledWith(expect.objectContaining({ page: 2 })));
+    await waitFor(() => expect(listCustomers).toHaveBeenLastCalledWith(expect.objectContaining({ page: 1 })));
+    expect(await screen.findByText('Remaining Customer')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
+  });
+
   it('distinguishes empty database from no matching search results', async () => {
     listCustomers.mockResolvedValue(envelope());
-    render(<Customers />);
+    renderCustomers();
     expect(await screen.findByText('No customers yet.')).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText(/Search customers/i), { target: { value: 'missing' } });
@@ -138,7 +171,7 @@ describe('Customers page', () => {
     const second = deferred();
     listCustomers.mockReturnValueOnce(first.promise).mockReturnValueOnce(second.promise);
 
-    render(<Customers />);
+    renderCustomers();
     fireEvent.change(screen.getByLabelText(/Search customers/i), { target: { value: 'new' } });
     await act(async () => {
       jest.advanceTimersByTime(300);
@@ -158,7 +191,7 @@ describe('Customers page', () => {
   it('shows retryable errors and reloads current query', async () => {
     listCustomers.mockRejectedValueOnce(new Error('API unavailable')).mockResolvedValueOnce(envelope([customer()]));
 
-    render(<Customers />);
+    renderCustomers();
     expect(await screen.findByRole('alert')).toHaveTextContent('API unavailable');
 
     fireEvent.click(screen.getByRole('button', { name: 'Retry' }));

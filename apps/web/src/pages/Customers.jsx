@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { listCustomers } from '../api/customers.js';
+import { useAuth } from '../auth.jsx';
 
 const COLUMNS = [
   { key: 'name', label: 'Name' },
@@ -19,6 +21,9 @@ function formatDate(value) {
 }
 
 export default function Customers() {
+  const { token, logout } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('signedUpAt');
@@ -47,21 +52,30 @@ export default function Customers() {
     setLoading(true);
     setError('');
 
-    listCustomers({ search, sort, direction, page, signal: controller.signal })
+    listCustomers({ search, sort, direction, page, token, signal: controller.signal })
       .then((result) => {
         if (requestId.current !== currentRequest) return;
+        if (result.totalPages > 0 && page > result.totalPages) {
+          setPage(result.totalPages);
+          return;
+        }
         setData(result);
         setLoading(false);
       })
       .catch((err) => {
         if (controller.signal.aborted || requestId.current !== currentRequest) return;
+        if (err.status === 401) {
+          logout();
+          navigate('/login', { replace: true, state: { from: location } });
+          return;
+        }
         setData(null);
         setError(err.message || 'Unable to load customers.');
         setLoading(false);
       });
 
     return () => controller.abort();
-  }, [search, sort, direction, page, retryCount]);
+  }, [search, sort, direction, page, retryCount, token, logout, navigate, location]);
 
   const handleSort = useCallback(
     (field) => {
