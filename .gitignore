@@ -11,3 +11,7 @@ coverage/
 # Logs
 npm-debug.log*
 yarn-error.log*
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
