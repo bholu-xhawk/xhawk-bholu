@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
+import Todos from './pages/Todos.jsx';
 
 export default function App() {
   return (
@@ -9,7 +9,7 @@ export default function App() {
       <nav className="p-4 bg-white shadow">
         <ul className="flex gap-4">
           <li>
-            <Link className="text-blue-600 hover:underline" to="/">Home</Link>
+            <Link className="text-blue-600 hover:underline" to="/">Todos</Link>
           </li>
           <li>
             <Link className="text-blue-600 hover:underline" to="/about">About</Link>
@@ -18,7 +18,7 @@ export default function App() {
       </nav>
       <main className="p-6">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Todos />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </main>
