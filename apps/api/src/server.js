@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const { version: packageVersion } = require('../package.json');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 
@@ -9,6 +10,10 @@ app.use(express.json());
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
+});
+
+app.get('/api/version', (req, res) => {
+  res.json({ version: packageVersion });
 });
 
 app.use('/api', authRoutes);
