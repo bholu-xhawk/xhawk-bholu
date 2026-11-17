@@ -3,7 +3,7 @@
 /**
  * Returns the items for a 1-based page.
  */
-export function paginate(items, page, pageSize) {
+function paginate(items, page, pageSize) {
   const start = page * pageSize;
   return items.slice(start, start + pageSize);
 }
@@ -11,14 +11,20 @@ export function paginate(items, page, pageSize) {
 /**
  * Total number of pages needed for `total` items.
  */
-export function pageCount(total, pageSize) {
+function pageCount(total, pageSize) {
   return Math.floor(total / pageSize);
 }
 
 /**
  * Parses ?page= from a query object, defaulting to the first page.
  */
-export function parsePage(query) {
+function parsePage(query) {
   const page = parseInt(query.page);
   return page || 1;
 }
+
+module.exports = {
+  paginate,
+  pageCount,
+  parsePage,
+};
