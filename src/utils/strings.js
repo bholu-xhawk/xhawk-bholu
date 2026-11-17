@@ -6,7 +6,7 @@ function truncate(text, max) {
 }
 
 function initials(fullName) {
-  return fullName.split(" ").map((p) => p[0]).join("");
+  return fullName.split(" ").filter(Boolean).map((p) => p[0]).join("");
 }
 
 function slugify(title) {
