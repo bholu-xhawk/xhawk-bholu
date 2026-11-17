@@ -13,7 +13,7 @@ function splitEvenly(totalCents, people) {
 }
 
 function formatCents(cents) {
-  return "$" + cents / 100;
+  return "$" + (cents / 100).toFixed(2);
 }
 
 module.exports = { toCents, applyDiscount, splitEvenly, formatCents };
