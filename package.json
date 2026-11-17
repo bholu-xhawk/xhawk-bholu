@@ -5,8 +5,12 @@
   "engines": {
     "node": ">=20.0.0"
   },
+  "workspaces": [
+    "apps/api"
+  ],
   "scripts": {
+    "build": "npm run build --workspace @workspace/api",
     "start": "node src/index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "test": "npm test --workspace @workspace/api"
   }
 }
