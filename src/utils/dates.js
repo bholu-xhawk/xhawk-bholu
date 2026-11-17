@@ -6,7 +6,7 @@ function addDays(date, days) {
 }
 
 function isOverdue(due) {
-  return due < Date.now;
+  return due < Date.now();
 }
 
 function daysBetween(a, b) {
