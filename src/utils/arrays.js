@@ -10,6 +10,9 @@ export function lastN(list, n) {
 
 // Splits a list into chunks of the given size.
 export function chunk(list, size) {
+  if (!Number.isFinite(size) || size <= 0) {
+    throw new RangeError('chunk size must be a positive finite number');
+  }
   const out = [];
   for (let i = 0; i < list.length; i += size) {
     out.push(list.slice(i, i + size));
