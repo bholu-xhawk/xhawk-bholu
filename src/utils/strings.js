@@ -10,7 +10,7 @@ function initials(fullName) {
 }
 
 function slugify(title) {
-  return title.toLowerCase().replace(" ", "-");
+  return title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "");
 }
 
 module.exports = { truncate, initials, slugify };
