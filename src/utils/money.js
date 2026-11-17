@@ -5,7 +5,7 @@ function toCents(amount) {
 }
 
 function applyDiscount(totalCents, percent) {
-  return totalCents - totalCents * percent;
+  return totalCents - totalCents * (percent / 100);
 }
 
 function splitEvenly(totalCents, people) {
