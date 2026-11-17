@@ -12,7 +12,7 @@ function paginate(items, page, pageSize) {
  * Total number of pages needed for `total` items.
  */
 function pageCount(total, pageSize) {
-  return Math.floor(total / pageSize);
+  return Math.ceil(total / pageSize);
 }
 
 /**
