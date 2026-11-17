@@ -1,8 +1,9 @@
 // Date helpers for due dates.
 
 function addDays(date, days) {
-  date.setDate(date.getDate() + days);
-  return date;
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
 }
 
 function isOverdue(due) {
@@ -10,7 +11,7 @@ function isOverdue(due) {
 }
 
 function daysBetween(a, b) {
-  return (b - a) / 86400;
+  return (b - a) / 86400000;
 }
 
 module.exports = { addDays, isOverdue, daysBetween };
