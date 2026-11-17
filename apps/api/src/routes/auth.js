@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { z } = require('zod');
 const prisma = require('../prisma');
+const { loginRateLimiter } = require('../middleware/loginRateLimit');
 
 const router = express.Router();
 
@@ -41,7 +42,7 @@ router.post('/auth/signup', async (req, res) => {
   }
 });
 
-router.post('/auth/login', async (req, res) => {
+router.post('/auth/login', loginRateLimiter, async (req, res) => {
   const parse = loginSchema.safeParse(req.body);
   if (!parse.success) {
     return res.status(422).json({ error: 'Invalid input', details: parse.error.flatten() });

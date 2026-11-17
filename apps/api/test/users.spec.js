@@ -1,8 +1,12 @@
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execSync } from 'node:child_process';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-process.env.DATABASE_URL = 'file:./test.db';
+const apiDir = dirname(dirname(fileURLToPath(import.meta.url)));
+
+process.env.DATABASE_URL = 'file:./users.test.db';
 process.env.JWT_SECRET = 'test-secret';
 
 let app;
@@ -10,7 +14,8 @@ let token;
 
 describe('Users API', () => {
   beforeAll(async () => {
-    execSync('pnpm -C . prisma:generate && pnpm -C . prisma:push', { stdio: 'inherit', env: process.env });
+    execSync('rm -f prisma/users.test.db prisma/users.test.db-journal', { cwd: apiDir });
+    execSync('npm run prisma:generate && npm run prisma:push', { cwd: apiDir, stdio: 'inherit', env: process.env });
     const mod = await import('../src/server.js');
     app = mod.default || mod;
 
@@ -20,8 +25,11 @@ describe('Users API', () => {
     token = res.body.token;
   }, 60000);
 
-  afterAll(() => {
-    try { execSync('rm -f ./test.db'); } catch {}
+  afterAll(async () => {
+    const prismaMod = await import('../src/prisma.js');
+    const prisma = prismaMod.default || prismaMod;
+    await prisma.$disconnect();
+    execSync('rm -f prisma/users.test.db prisma/users.test.db-journal', { cwd: apiDir });
   });
 
   it('GET /api/users requires auth', async () => {
