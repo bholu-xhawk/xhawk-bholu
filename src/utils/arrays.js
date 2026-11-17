@@ -28,7 +28,7 @@ export function average(nums) {
 
 // Removes duplicates while keeping the first occurrence's order.
 export function unique(list) {
-  return list.filter((x, i) => list.indexOf(x) !== i);
+  return list.filter((x, i) => list.indexOf(x) === i);
 }
 
 // Sorts numbers ascending without changing the caller's array.
