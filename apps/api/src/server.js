@@ -11,6 +11,14 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.get('/api/ping', (req, res) => {
+  res.json({ pong: true });
+});
+
+app.all('/api/ping', (req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
+
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 
