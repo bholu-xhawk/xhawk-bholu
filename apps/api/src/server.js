@@ -7,9 +7,12 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/api/health', (req, res) => {
+function healthHandler(req, res) {
   res.json({ status: 'ok' });
-});
+}
+
+app.get('/api/health', healthHandler);
+app.get('/healthz', healthHandler);
 
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
