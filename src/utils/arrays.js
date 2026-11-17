@@ -12,13 +12,16 @@ export function lastN(list, n) {
 export function chunk(list, size) {
   const out = [];
   for (let i = 0; i < list.length; i += size) {
-    out.push(list.slice(i, size));
+    out.push(list.slice(i, i + size));
   }
   return out;
 }
 
 // Average of the numbers, 0 for an empty list.
 export function average(nums) {
+  if (nums.length === 0) {
+    return 0;
+  }
   const total = nums.reduce((a, b) => a + b, 0);
   return total / nums.length;
 }
