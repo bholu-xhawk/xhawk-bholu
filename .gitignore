@@ -11,3 +11,10 @@ coverage/
 # Logs
 npm-debug.log*
 yarn-error.log*
+
+# Local package manager config and generated lockfiles
+.npmrc
+package-lock.json
+
+# Local Prisma SQLite databases
+apps/api/prisma/*.db
