@@ -5,6 +5,10 @@ node_modules/
 dist/
 coverage/
 
+# Local API test databases
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
+
 # Env files
 .env
 
