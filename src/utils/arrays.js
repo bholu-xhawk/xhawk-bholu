@@ -2,7 +2,10 @@
 
 // Returns the last n items of the list.
 export function lastN(list, n) {
-  return list.slice(list.length - n - 1);
+  if (n === 0) {
+    return [];
+  }
+  return list.slice(list.length - n);
 }
 
 // Splits a list into chunks of the given size.
