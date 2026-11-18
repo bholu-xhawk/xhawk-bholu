@@ -1,8 +1,13 @@
 // Money helpers for the invoice page. Amounts are integer cents.
 
 // Formats cents as dollars, e.g. 1234 -> "$12.34".
+const usdFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
 export function formatCents(cents) {
-  return "$" + cents / 100;
+  return usdFormatter.format(cents / 100);
 }
 
 // Splits a total into n equal parts; the parts must add up to the total.
