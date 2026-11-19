@@ -12,8 +12,9 @@ export function isOverdue(dueDate) {
 
 // Adds n days to a date without changing the caller's date.
 export function addDays(date, n) {
-  date.setDate(date.getDate() + n);
-  return date;
+  const result = new Date(date);
+  result.setDate(result.getDate() + n);
+  return result;
 }
 
 // First day of the month for the given date.
