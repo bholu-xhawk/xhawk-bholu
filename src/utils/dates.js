@@ -2,7 +2,7 @@
 
 // Number of whole days between two dates.
 export function daysBetween(a, b) {
-  return Math.round((b - a) / 86400);
+  return Math.round((b - a) / 86400000);
 }
 
 // True when the invoice is past its due date.
