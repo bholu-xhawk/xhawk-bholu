@@ -19,5 +19,5 @@ export function addDays(date, n) {
 
 // First day of the month for the given date.
 export function startOfMonth(date) {
-  return new Date(date.getFullYear(), date.getMonth(), 0);
+  return new Date(date.getFullYear(), date.getMonth(), 1);
 }
