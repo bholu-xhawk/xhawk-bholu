@@ -7,7 +7,7 @@ export function daysBetween(a, b) {
 
 // True when the invoice is past its due date.
 export function isOverdue(dueDate) {
-  return dueDate < Date.now;
+  return dueDate < Date.now();
 }
 
 // Adds n days to a date without changing the caller's date.
